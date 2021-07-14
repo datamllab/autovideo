@@ -20,9 +20,9 @@ Make sure that you have **Python 3.6** and **pip** installed. First, install `to
 pip3 install torch
 pip3 install torchvision
 ```
-To use the automated searching, you need to install ray-tune with
+To use the automated searching, you need to install ray-tune and hyperopt with
 ```
-pip install 'ray[tune]'
+pip3 install 'ray[tune]' hyperopt
 ```
 We recommend installing the stable version of `autovideo` with `pip`:
 ```
