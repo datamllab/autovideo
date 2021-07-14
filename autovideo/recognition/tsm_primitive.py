@@ -1,4 +1,30 @@
-#References : https://github.com/mit-han-lab/temporal-shift-module
+'''
+The code is derived from https://github.com/mit-han-lab/temporal-shift-module
+
+MIT License
+
+Copyright (c) 2021 MIT HAN Lab
+Copyright (c) 2021 DATA Lab at Texas A&M University
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+'''
+
 import os
 import math
 import numpy as np
@@ -200,7 +226,7 @@ class TSMPrimitive(SupervisedPrimitiveBase[Inputs, Outputs, Params, Hyperparams]
             
         #For pre-trained model modify the last layer to output 51 for HMDB, 101 for UCF and so on.
         num_classes = len(np.unique(self._outputs.values))
-        self.model.fc = nn.Linear(2048, num_classes)
+        self.model.new_fc = nn.Linear(2048, num_classes)
         """for name, param in self.model.named_parameters():
             if not 'fc' in name:
                 param.requires_grad = False"""

@@ -1,3 +1,31 @@
+'''
+This code has been derived from https://github.com/hassony2/kinetics_i3d_pytorch
+
+MIT License
+
+Copyright (c) 2017 Yana Hasson
+Copyright (c) 2021 DATA Lab at Texas A&M University
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+'''
+
+
 import math
 
 import os
@@ -61,7 +89,7 @@ class Hyperparams(SupervisedHyperparamsBase):
         description="The learning rate of the optimizer"
     )
     num_segments = hyperparams.Hyperparameter[int](
-        default=3,
+        default=16,
         semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter'],
         description="The number of segments of frames in each video per training loop"
     )
@@ -160,8 +188,7 @@ class I3DPrimitive(SupervisedPrimitiveBase[Inputs, Outputs, Params, Hyperparams]
         num_steps_per_update = self.hyperparams['num_steps_per_update']
         s1, s2 = 0.125 / num_steps_per_update, 0.375 / num_steps_per_update
         lr_steps = [int(total_steps * s1), int(total_steps * s2)] #Steps after which lr decays by a factor of 10
-        #root.error('lr_steps: {}, total_steps: {}, num_steps_per_update: {}'.format(lr_steps, total_steps,
-                                                                                    num_steps_per_update))
+        #root.error('lr_steps: {}, total_steps: {}, num_steps_per_update: {}'.format(lr_steps, total_steps,num_steps_per_update))
         lr_sched = torch.optim.lr_scheduler.MultiStepLR(optimizer, lr_steps)
         tmp_file_path = os.path.join(self.tmp_dir, str(uuid.uuid4()))
         #root.error('tmp: {}'.format(tmp_file_path))

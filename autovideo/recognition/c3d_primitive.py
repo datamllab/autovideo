@@ -1,3 +1,30 @@
+'''
+The code has been derived from https://github.com/jfzhang95/pytorch-video-recognition
+
+MIT License
+
+Copyright (c) 2018 Pyjcsx
+Copyright (c) 2021 DATA Lab at Texas A&M University
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+'''
+
 import os
 import warnings
 import cv2
@@ -22,7 +49,7 @@ from autovideo.base.supervised_base import SupervisedParamsBase, SupervisedHyper
 from autovideo.utils import wrap_predictions, construct_primitive_metadata, compute_accuracy, make_predictions, get_frame_list, get_video_loader, adjust_learning_rate, logger
 
 pretrained_url = "https://drive.google.com/u/1/uc?export=download&confirm=Z7Yt&id=19NWziHWh1LgCcHU34geoKwYezAogv9fX"
-
+pretrained_path = "weights/c3d-pretrained.pth"
 __all__ = ('C3DPrimitive',)
 Inputs = container.DataFrame
 Outputs = container.DataFrame
@@ -63,7 +90,7 @@ class Hyperparams(SupervisedHyperparamsBase):
         description="The learning rate of the optimizer"
     )
     num_segments = hyperparams.Hyperparameter[int](
-        default=3,
+        default=16,
         semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter'],
         description="The number of segments of frames in each video per training loop"
     )
@@ -342,7 +369,7 @@ class C3D(nn.Module):
                         "classifier.3.bias": "fc7.bias",
                         }
 
-        p_dict = torch.load('/home/anmoll/autovideo/autovideo/c3d-pretrained.pth')
+        p_dict = torch.load(pretrained_path)
         #p_dict = load_state_dict_from_url(pretrained_url)
         s_dict = self.state_dict()
         for name in p_dict:
@@ -389,12 +416,4 @@ def get_10x_lr_params(model):
         for k in b[j].parameters():
             if k.requires_grad:
                 yield k
-
-
-'''Reference: https://github.com/jfzhang95/pytorch-video-recognition'''
-
-"""
-Test command to check this
-python3 -m d3m runtime --volume /tmp/cmu/pretrained_files fit-produce -p pipeline.yml -r /home/grads/z/zaid.bhat1234/cleand3m/datasets/video_sample/TRAIN/problem_TRAIN/problemDoc.json -i /home/grads/z/zaid.bhat1234/cleand3m/datasets/video_sample/TRAIN/dataset_TRAIN/datasetDoc.json -t /home/grads/z/zaid.bhat1234/cleand3m/datasets/video_sample/TEST/dataset_TEST/datasetDoc.json -o results.csv
-"""
 
