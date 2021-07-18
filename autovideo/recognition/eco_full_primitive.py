@@ -84,7 +84,7 @@ class Hyperparams(SupervisedHyperparamsBase):
                     'main process.'
     )
     batch_size = hyperparams.Hyperparameter[int](
-        default=2,
+        default=8,
         semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter'],
         description="The batch size of training"
     )
