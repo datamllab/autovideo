@@ -80,7 +80,7 @@ class Hyperparams(SupervisedHyperparamsBase):
                     'main process.'
     )
     batch_size = hyperparams.Hyperparameter[int](
-        default=2,
+        default=8,
         semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter'],
         description="The batch size of training"
     )
@@ -249,13 +249,13 @@ class ECOPrimitive(SupervisedPrimitiveBase[Inputs, Outputs, Params, Hyperparams]
             new_state_dict[k] = torch.DoubleTensor(model_dict[k].size()).zero_()
             if 'weight' in k:
                 if 'bn' in k:
-                    print("{} init as: 1".format(k))
+                    # print("{} init as: 1".format(k))
                     constant_(new_state_dict[k], 1)
                 else:
-                    print("{} init as: kaiming normal".format(k))
+                    # print("{} init as: kaiming normal".format(k))
                     kaiming_normal_(new_state_dict[k])
             elif 'bias' in k:
-                print("{} init as: 0".format(k))
+                # print("{} init as: 0".format(k))
                 constant_(new_state_dict[k], 0)
 
         print("------------------------------------")
