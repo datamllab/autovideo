@@ -3,6 +3,9 @@
 
 AutoVideo is a system for automated video analysis. It is developed based on [D3M](https://gitlab.com/datadrivendiscovery/d3m) infrastructure, which describes machine learning with generic pipeline languages. Currently, it focuses on video action recognition, supporting various state-of-the-art video action recognition algorithms. It also supports automated model selection and hyperparameter tuning. AutoVideo is developed by [DATA Lab](http://faculty.cs.tamu.edu/xiahu/) at Texas A&M University.
 
+*   Paper: [https://arxiv.org/abs/2108.04212](https://arxiv.org/abs/2108.04212)
+*   Tutorial: Coming soon!
+
 There are some other video analysis libraries out there, but this one is designed to be highly modular. AutoVideo is highly extendible thanks to the pipeline language, where each model is wrapped as a primitive with some hyperparameters. This allows us to easily support other algorithms for other video analysis tasks, which will be our future efforts. It is also convenient to search models and hyperparameters with the pipeline language.
 
 <img src="docs/demo.gif" alt="Demo" />
@@ -13,6 +16,16 @@ An overview of the library is shown as below. Each module in AutoVideo is wrappe
 
 ## Cite this work
 If you find this repo useful, you may cite:
+
+Zha, Daochen, et al. "AutoVideo: An Automated Video Action Recognition System." arXiv preprint arXiv:1910.04376 (2021).
+```bibtex
+@article{zha2019autovideo,
+  title={AutoVideo: An Automated Video Action Recognition System},
+  author={Zha, Daochen and Bhat, Zaid and Chen, Yi-Wei and Wang, Yicheng and Ding, Sirui and Jain, Anmoll and Bhat, Mohammad and Lai, Kwei-Herng and Chen, Jiaben and Zou, Na and Hu, Xia},
+  journal={arXiv preprint arXiv:2108.04212},
+  year={2021}
+}
+```
 
 ## Installation
 Make sure that you have **Python 3.6** and **pip** installed. First, install `torch` and `torchvision` with
