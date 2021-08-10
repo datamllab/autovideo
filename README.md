@@ -1,5 +1,5 @@
 # AutoVideo: An Automated Video Action Recognition System
-<img width="500" src="docs/autovideo_logo.png" alt="Logo" />
+<img width="500" src="https://raw.githubusercontent.com/datamllab/autovideo/main/docs/autovideo_logo.png" alt="Logo" />
 
 AutoVideo is a system for automated video analysis. It is developed based on [D3M](https://gitlab.com/datadrivendiscovery/d3m) infrastructure, which describes machine learning with generic pipeline languages. Currently, it focuses on video action recognition, supporting various state-of-the-art video action recognition algorithms. It also supports automated model selection and hyperparameter tuning. AutoVideo is developed by [DATA Lab](http://faculty.cs.tamu.edu/xiahu/) at Texas A&M University.
 
@@ -17,7 +17,7 @@ An overview of the library is shown as below. Each module in AutoVideo is wrappe
 ## Cite this work
 If you find this repo useful, you may cite:
 
-Zha, Daochen, et al. "AutoVideo: An Automated Video Action Recognition System." arXiv preprint arXiv:1910.04376 (2021).
+Zha, Daochen, et al. "AutoVideo: An Automated Video Action Recognition System." arXiv preprint arXiv:2108.0421 (2021).
 ```bibtex
 @article{zha2019autovideo,
   title={AutoVideo: An Automated Video Action Recognition System},
@@ -28,7 +28,7 @@ Zha, Daochen, et al. "AutoVideo: An Automated Video Action Recognition System." 
 ```
 
 ## Installation
-Make sure that you have **Python 3.6** and **pip** installed. First, install `torch` and `torchvision` with
+Make sure that you have **Python 3.6** and **pip** installed. Currently the code is only tested in Linux system. First, install `torch` and `torchvision` with
 ```
 pip3 install torch
 pip3 install torchvision
@@ -52,7 +52,7 @@ pip3 install -e .
 ```
 
 ## Toy Examples
-To try the examples, you may download `hmdb6` dataset, which is a subset of `hmdb51` with only 51 classes. All the datasets can be downloaded from [Google Drive](https://drive.google.com/drive/folders/13oVPMyoBgNwEAsE_Ad3XVI1W5cNqfvrq). Then, you may unzip a dataset and put it in [datasets](datasets/).
+To try the examples, you may download `hmdb6` dataset, which is a subset of `hmdb51` with only 6 classes. All the datasets can be downloaded from [Google Drive](https://drive.google.com/drive/folders/13oVPMyoBgNwEAsE_Ad3XVI1W5cNqfvrq). Then, you may unzip a dataset and put it in [datasets](datasets/).
 ### Fitting and saving a pipeline
 ```
 python3 examples/fit.py
@@ -60,7 +60,7 @@ python3 examples/fit.py
 Some important hyperparameters are as follows.
 *   `--alg`: the supported algorithm. Currently we support `tsn`, `tsm`, `i3d`, `eco`, `eco_full`, `c3d`, `r2p1d`, and `r3d`.
 *   `--pretrained`: whether loading pre-trained weights and fine-tuning.
-*   `--gpu`: which gpu device tp use. Empty string for CPU. 
+*   `--gpu`: which gpu device to use. Empty string for CPU. 
 *   `--data_dir`: the directory of the dataset
 *   `--log_dir`: the path for sainge the log
 *   `--save_dir`: the path for saving the fitted pipeline
@@ -73,7 +73,7 @@ python3 examples/produce.py
 Some important hyperparameters are as follows.
 *   `--gpu`: which gpu device tp use. Empty string for CPU. 
 *   `--data_dir`: the directory of the dataset
-*   `--log_dir`: the path for sainge the log
+*   `--log_dir`: the path for saving the log
 *   `--load_dir`: the path for loading the fitted pipeline
 
 ### Loading a fitted pipeline and recogonizing actions
@@ -84,7 +84,7 @@ python3 examples/recogonize.py
 Some important hyperparameters are as follows.
 *   `--gpu`: which gpu device tp use. Empty string for CPU. 
 *   `--video_path`: the path of video file
-*   `--log_dir`: the path for sainge the log
+*   `--log_dir`: the path for saving the log
 *   `--load_dir`: the path for loading the fitted pipeline
 
 ### Fitting and producing a pipeline
@@ -95,9 +95,9 @@ python3 examples/fit_produce.py
 Some important hyperparameters are as follows.
 *   `--alg`: the supported algorithm.
 *   `--pretrained`: whether loading pre-trained weights and fine-tuning.
-*   `--gpu`: which gpu device tp use. Empty string for CPU. 
+*   `--gpu`: which gpu device to use. Empty string for CPU. 
 *   `--data_dir`: the directory of the dataset
-*   `--log_dir`: the path for sainge the log
+*   `--log_dir`: the path for saving the log
 
 ### Automated searching
 In addition to running them by yourself, we also support automated model selection and hyperparameter tuning:
@@ -107,7 +107,7 @@ python3 examples/search.py
 Some important hyperparameters are as follows.
 *   `--alg`: the searching  algorithm. Currently, we support `random` and `hyperopt`.
 *   `--num_samples`: the number of samples to be tried
-*   `--gpu`: which gpu device tp use. Empty string for CPU. 
+*   `--gpu`: which gpu device to use. Empty string for CPU. 
 *   `--data_dir`: the directory of the dataset
 
 ## Supported Algorithms
