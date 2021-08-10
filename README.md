@@ -20,7 +20,7 @@ If you find this repo useful, you may cite:
 
 Zha, Daochen, et al. "AutoVideo: An Automated Video Action Recognition System." arXiv preprint arXiv:2108.0421 (2021).
 ```bibtex
-@article{zha2019autovideo,
+@article{zha2021autovideo,
   title={AutoVideo: An Automated Video Action Recognition System},
   author={Zha, Daochen and Bhat, Zaid and Chen, Yi-Wei and Wang, Yicheng and Ding, Sirui and Jain, Anmoll and Bhat, Mohammad and Lai, Kwei-Herng and Chen, Jiaben and Zou, Na and Hu, Xia},
   journal={arXiv preprint arXiv:2108.04212},
