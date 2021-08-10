@@ -72,7 +72,7 @@ After fitting a pipeline, you can load a pipeline and make predictions.
 python3 examples/produce.py
 ```
 Some important hyperparameters are as follows.
-*   `--gpu`: which gpu device tp use. Empty string for CPU. 
+*   `--gpu`: which gpu device to use. Empty string for CPU. 
 *   `--data_dir`: the directory of the dataset
 *   `--log_dir`: the path for saving the log
 *   `--load_dir`: the path for loading the fitted pipeline
@@ -83,7 +83,7 @@ After fitting a pipeline, you can also make predicitons on a single video. As a 
 python3 examples/recogonize.py
 ```
 Some important hyperparameters are as follows.
-*   `--gpu`: which gpu device tp use. Empty string for CPU. 
+*   `--gpu`: which gpu device to use. Empty string for CPU. 
 *   `--video_path`: the path of video file
 *   `--log_dir`: the path for saving the log
 *   `--load_dir`: the path for loading the fitted pipeline
