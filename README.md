@@ -8,7 +8,7 @@ AutoVideo is a system for automated video analysis. It is developed based on [D3
 
 There are some other video analysis libraries out there, but this one is designed to be highly modular. AutoVideo is highly extendible thanks to the pipeline language, where each model is wrapped as a primitive with some hyperparameters. This allows us to easily support other algorithms for other video analysis tasks, which will be our future efforts. It is also convenient to search models and hyperparameters with the pipeline language.
 
-<img src="docs/demo.gif" alt="Demo" />
+<img src="https://raw.githubusercontent.com/datamllab/autovideo/main/docs/demo.gif" alt="Demo" />
 
 An overview of the library is shown as below. Each module in AutoVideo is wrapped as a primitive with some hyperparameters. A pipeline consists of a series of primitives from pre-processing to action recognition. AutoVideo is equipped with tuners to search models and hyperparameters. We welcome contributions to enrich AutoVideo with more primitives. You can find instructions in [Contributing Guide](./CONTRIBUTING.md).
 
