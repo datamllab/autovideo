@@ -1,7 +1,7 @@
 # AutoVideo: An Automated Video Action Recognition System
 <img width="500" src="https://raw.githubusercontent.com/datamllab/autovideo/main/docs/autovideo_logo.png" alt="Logo" />
 
-AutoVideo is a system for automated video analysis. It is developed based on [D3M](https://gitlab.com/datadrivendiscovery/d3m) infrastructure, which describes machine learning with generic pipeline languages. Currently, it focuses on video action recognition, supporting various state-of-the-art video action recognition algorithms. It also supports automated model selection and hyperparameter tuning. AutoVideo is developed by [DATA Lab](http://faculty.cs.tamu.edu/xiahu/) at Texas A&M University.
+AutoVideo is a system for automated video analysis. It is developed based on [D3M](https://gitlab.com/datadrivendiscovery/d3m) infrastructure, which describes machine learning with generic pipeline languages. Currently, it focuses on video action recognition, supporting various state-of-the-art video action recognition algorithms. It also supports automated model selection and hyperparameter tuning. AutoVideo is developed by [DATA Lab](https://cs.rice.edu/~xh37/) at Rice University.
 
 *   Paper: [https://arxiv.org/abs/2108.04212](https://arxiv.org/abs/2108.04212)
 *   Tutorial: [[Towards Data Science] AutoVideo: An Automated Video Action Recognition System](https://towardsdatascience.com/autovideo-an-automated-video-action-recognition-system-43198beff99d)
@@ -148,6 +148,3 @@ d3mIndex,video,label
 8,brushing_hair_2_brush_hair_h_nm_np1_ba_med_2.avi,0
 ```
 The media folder should contain video files. You may refer to our example hmdb6 dataset in [Google Drive](https://drive.google.com/drive/folders/13oVPMyoBgNwEAsE_Ad3XVI1W5cNqfvrq). We have also prepared hmdb51 and ucf101 in the Google Drive for benchmarking. Please read [benchmark](docs/benchmark.md) for more details. For some of the algorithms (C3D, R2P1D and R3D), if you want to load the pre-trained weights and fine-tune, you need to download the weights from [Google Drive](https://drive.google.com/drive/folders/1fABdnH-l92q2RbA8hfQnUPZOYoTZCR-Q) and put it to [weights](weights).
-
-## Acknowledgement
-We gratefully acknowledge the Data Driven Discovery of Models (D3M) program of the Defense Advanced Research Projects Agency (DARPA).
