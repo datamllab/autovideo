@@ -64,7 +64,7 @@ Some important hyperparameters are as follows.
 *   `--gpu`: which gpu device to use. Empty string for CPU. 
 *   `--data_dir`: the directory of the dataset
 *   `--log_dir`: the path for sainge the log
-*   `--save_dir`: the path for saving the fitted pipeline
+*   `--save_path`: the path for saving the fitted pipeline
 
 ### Loading a fitted pipeline and producing predictions
 After fitting a pipeline, you can load a pipeline and make predictions.
@@ -75,7 +75,7 @@ Some important hyperparameters are as follows.
 *   `--gpu`: which gpu device to use. Empty string for CPU. 
 *   `--data_dir`: the directory of the dataset
 *   `--log_dir`: the path for saving the log
-*   `--load_dir`: the path for loading the fitted pipeline
+*   `--load_path`: the path for loading the fitted pipeline
 
 ### Loading a fitted pipeline and recogonizing actions
 After fitting a pipeline, you can also make predicitons on a single video. As a demo, you may download the fitted pipeline and the demo video from [Google Drive](https://drive.google.com/drive/folders/1j4iGUQG3m_TXbQ8mQnaR_teg1w0I2x60). Then, you can use the following command to recogonize the action in the video:
@@ -86,7 +86,7 @@ Some important hyperparameters are as follows.
 *   `--gpu`: which gpu device to use. Empty string for CPU. 
 *   `--video_path`: the path of video file
 *   `--log_dir`: the path for saving the log
-*   `--load_dir`: the path for loading the fitted pipeline
+*   `--load_path`: the path for loading the fitted pipeline
 
 ### Fitting and producing a pipeline
 Alternatively, you can do `fit` and `produce` without saving the model with
