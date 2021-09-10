@@ -22,15 +22,12 @@ def run(args):
     test_media_dir = os.path.join(args.data_dir, 'media')
     target_index = 2
 
-    from autovideo import produce, extract_frames, compute_accuracy_with_preds
+    from autovideo import produce, compute_accuracy_with_preds
     # Read the CSV file
     test_dataset_ = pd.read_csv(test_table_path)
     test_dataset = test_dataset_.drop(['label'], axis=1)
     test_labels = test_dataset_['label']
 
-    # Extract frames from the video
-    video_ext = test_dataset.iloc[0, 1].split('.')[-1]
-    extract_frames(test_media_dir, video_ext)
 
     # Load fitted pipeline
     import torch

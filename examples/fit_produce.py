@@ -25,17 +25,12 @@ def run(args):
     test_media_dir = train_media_dir
     target_index = 2
 
-    from autovideo import fit_produce, extract_frames, build_pipeline, compute_accuracy_with_preds
+    from autovideo import fit_produce, build_pipeline, compute_accuracy_with_preds
     # Read the CSV file
     train_dataset = pd.read_csv(train_table_path)
     test_dataset_ = pd.read_csv(test_table_path)
     test_dataset = test_dataset_.drop(['label'], axis=1)
     test_labels = test_dataset_['label']
-
-    # Extract frames from the video
-    video_ext = train_dataset.iloc[0, 1].split('.')[-1]
-    extract_frames(train_media_dir, video_ext)
-    extract_frames(test_media_dir, video_ext)
 
     # Build pipeline based on configs
     # Here we can specify the hyperparameters defined in each primitive
