@@ -90,7 +90,9 @@ def fit_produce(train_dataset, train_media_dir, test_dataset, test_media_dir, ta
 
 def produce_by_path(fitted_pipeline, video_path):
     tmp_dir = os.path.join("tmp", str(uuid.uuid4()))
+    os.makedirs(tmp_dir, exist_ok=True)
     video_name = video_path.split('/')[-1]
+    shutil.copy(video_path, tmp_dir)
 
     dataset = {
         'd3mIndex': [0],
