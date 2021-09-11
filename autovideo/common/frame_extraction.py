@@ -19,6 +19,7 @@ import logging
 import sys
 import uuid
 from multiprocessing import Pool
+from urllib.parse import urlparse
 
 import mmcv
 import os
@@ -75,7 +76,7 @@ class ExtractFramesPrimitive(transformer.TransformerPrimitiveBase[Inputs, Output
         location_base_uris = inputs.metadata.query(selector)['location_base_uris']
         media_types = inputs.metadata.query(selector)['media_types']
 
-        media_dir = location_base_uris[0].split('://')[1][:-1]
+        media_dir = urlparse(location_base_uris[0]).path[:-1]
         ext = media_types[0].split('/')[-1]
 
         out_dir = os.path.join(media_dir, 'frames')
