@@ -3,6 +3,7 @@ import abc
 import typing
 from urllib.parse import urlparse
 
+import pandas as pd
 import torch
 
 from d3m import container
@@ -59,10 +60,7 @@ class SupervisedPrimitiveBase(PrimitiveBase[Inputs, Outputs, Params, Hyperparams
     def set_training_data(self, *, inputs: Inputs, outputs: Outputs) -> None:
         self._inputs = inputs
         self._outputs = outputs
-        try:
-            self._media_dir = urlparse(self._inputs.metadata.query_column(0)['location_base_uris'][0]).path
-        except KeyError:
-            pass
+        self._frame_list = pd.concat([self._inputs, self._outputs], axis=1).to_numpy()
 
     @abc.abstractmethod
     def _fit(self, *, timeout: float = None, iterations: int = None):
@@ -82,4 +80,4 @@ class SupervisedPrimitiveBase(PrimitiveBase[Inputs, Outputs, Params, Hyperparams
         make the predictions
         """
 
-    
+
