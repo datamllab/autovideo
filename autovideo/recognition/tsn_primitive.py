@@ -47,7 +47,7 @@ import torchvision
 
 from autovideo.base.supervised_base import SupervisedParamsBase, SupervisedHyperparamsBase, SupervisedPrimitiveBase
 #from autovideo.utils.transforms import *
-from autovideo.utils import wrap_predictions, construct_primitive_metadata, compute_accuracy, make_predictions, get_frame_list, get_video_loader, adjust_learning_rate, logger
+from autovideo.utils import wrap_predictions, construct_primitive_metadata, compute_accuracy, make_predictions, get_video_loader, adjust_learning_rate, logger
 
 pretrained_url = "https://open-mmlab.s3.ap-northeast-2.amazonaws.com/mmaction/models/kinetics400/tsn2d_kinetics400_rgb_r50_seg3_f1s1-b702e12f.pth"
 
@@ -124,7 +124,7 @@ class TSNPrimitive(SupervisedPrimitiveBase[Inputs, Outputs, Params, Hyperparams]
         Training
         """
         #Randomly split 5% data for validation
-        frame_list = np.array(get_frame_list(self._media_dir, self._inputs, self._outputs))
+        frame_list = self._frame_list
         idx = np.array([i for i in range(len(frame_list))])
         np.random.shuffle(idx)
         train_idx, valid_idx = idx[:int(len(idx)*(1-self.hyperparams['valid_ratio']))], idx[int(len(idx)*(1-self.hyperparams['valid_ratio'])):]
@@ -228,8 +228,7 @@ class TSNPrimitive(SupervisedPrimitiveBase[Inputs, Outputs, Params, Hyperparams]
         make the predictions
         """
         #Create DataLoader
-        media_dir = urlparse(inputs.metadata.query_column(0)['location_base_uris'][0]).path
-        test_list = get_frame_list(media_dir, inputs, test_mode=True)
+        test_list = inputs.to_numpy()
         test_loader = get_video_loader(video_list=test_list,
                                         crop_size=self.model.crop_size,
                                         scale_size=self.model.scale_size,

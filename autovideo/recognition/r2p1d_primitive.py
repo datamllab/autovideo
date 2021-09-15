@@ -44,7 +44,7 @@ from torchvision import transforms
 import torchvision
 
 from autovideo.base.supervised_base import SupervisedParamsBase, SupervisedHyperparamsBase, SupervisedPrimitiveBase
-from autovideo.utils import wrap_predictions, construct_primitive_metadata, compute_accuracy, make_predictions, get_frame_list, get_video_loader, adjust_learning_rate, logger
+from autovideo.utils import wrap_predictions, construct_primitive_metadata, compute_accuracy, make_predictions, get_video_loader, adjust_learning_rate, logger
 from torch.nn.modules.utils import _triple
 
 import math
@@ -156,7 +156,7 @@ class R2P1DPrimitive(SupervisedPrimitiveBase[Inputs, Outputs, Params, Hyperparam
         Training
         """
         #Randomly split 5% data for validation
-        frame_list = np.array(get_frame_list(self._media_dir, self._inputs, self._outputs))
+        frame_list = self._frame_list
         idx = np.array([i for i in range(len(frame_list))])
         np.random.shuffle(idx)
         train_idx, valid_idx = idx[:int(len(idx)*(1-self.hyperparams['valid_ratio']))], idx[int(len(idx)*(1-self.hyperparams['valid_ratio'])):]
@@ -246,8 +246,7 @@ class R2P1DPrimitive(SupervisedPrimitiveBase[Inputs, Outputs, Params, Hyperparam
         """
         #mean,std = get_mean_std(self.opt.value_scale, dataset=self.opt.mean_dataset)
         #Create DataLoader
-        media_dir = urlparse(inputs.metadata.query_column(0)['location_base_uris'][0]).path
-        test_list = get_frame_list(media_dir, inputs, test_mode=True)
+        test_list = inputs.to_numpy()
         test_loader = get_video_loader(video_list=test_list,
                                         crop_size=112,
                                         scale_size=112,
