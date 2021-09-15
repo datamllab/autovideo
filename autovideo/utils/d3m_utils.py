@@ -129,7 +129,7 @@ def build_pipeline(config):
     pipeline_description.add_step(step_7)
 
     # Final Output
-    pipeline_description.add_output(name='output predictions', data_reference='steps.6.produce')
+    pipeline_description.add_output(name='output predictions', data_reference='steps.7.produce')
 
     return pipeline_description
 
