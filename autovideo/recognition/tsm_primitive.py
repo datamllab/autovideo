@@ -47,6 +47,7 @@ from autovideo.utils.transforms import *
 from autovideo.utils import wrap_predictions, construct_primitive_metadata, compute_accuracy, make_predictions, get_frame_list, get_video_loader, adjust_learning_rate, logger
 
 pretrained_url = "https://file.lzhu.me/projects/tsm/models/TSM_kinetics_RGB_resnet50_shift8_blockres_avg_segment16_e50.pth"
+pretrained_path = 'weights/TSM_kinetics_RGB_resnet50_shift8_blockres_avg_segment16_e50.pth'
 
 __all__ = ('TSMPrimitive',)
 Inputs = container.DataFrame
@@ -206,7 +207,8 @@ class TSMPrimitive(SupervisedPrimitiveBase[Inputs, Outputs, Params, Hyperparams]
             this_arch = pretrained_url.split('TSM_')[1].split('_')[2] #Gets the base_model name from the url
             #Load TSM model
             self.model = TSM(400, self.hyperparams['num_segments'], self.hyperparams['modality'], base_model=this_arch, consensus_type='avg', img_feature_dim=256, dropout=0.5 )
-            checkpoint = load_state_dict_from_url(pretrained_url)
+            #checkpoint = load_state_dict_from_url(pretrained_url)
+            checkpoint = torch.load(pretrained_path, map_location=self.device)
             """if torch.__version__ < '1.6.0':
                 raise ValueError('Torch version too low for loading checkpoint. Need torch >= 1.6.0')
             checkpoint = load_state_dict_from_url(pretrained_url)"""

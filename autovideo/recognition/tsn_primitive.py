@@ -49,7 +49,7 @@ from autovideo.base.supervised_base import SupervisedParamsBase, SupervisedHyper
 #from autovideo.utils.transforms import *
 from autovideo.utils import wrap_predictions, construct_primitive_metadata, compute_accuracy, make_predictions, get_frame_list, get_video_loader, adjust_learning_rate, logger
 
-pretrained_url = "https://open-mmlab.s3.ap-northeast-2.amazonaws.com/mmaction/models/kinetics400/tsn2d_kinetics400_rgb_r50_seg3_f1s1-b702e12f.pth"
+pretrained_path = 'weights/tsn2d_kinetics400_rgb_r50_seg3_f1s1-b702e12f.pth'
 
 __all__ = ('TSNPrimitive',)
 Inputs = container.DataFrame
@@ -203,7 +203,7 @@ class TSNPrimitive(SupervisedPrimitiveBase[Inputs, Outputs, Params, Hyperparams]
         #Load TSN model
         self.model = TSN(400, self.hyperparams['num_segments'], self.hyperparams['modality'], base_model='resnet50', consensus_type='avg', dropout=0.8)
         if pretrained:
-            model_data = load_state_dict_from_url(pretrained_url)
+            model_data = torch.load(pretrained_path, map_location=self.device)
             # Modify the layer names to match the pre-trained model and the loaded TSN model for succesfull loading
             state_dict = {k.replace('backbone.', 'base_model.'): v for k, v in model_data['state_dict'].items()}
             count = 0
