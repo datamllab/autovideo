@@ -23,7 +23,7 @@ AutoVideo uses general pipeline languages. Each module is wrapped as a primitive
 *   Create hyperparameters in `SupervisedHyperparamsBase`.
 *   Put the important variables that you want them to be saved and reused into `SupervisedParamsBase`. Be default, we assume you will save the model class.
 *   Implement the functions in `SupervisedPrimitiveBase`, such as `fit`, `produce`, etc.
-*   Register the primitive in [entry_points.ini](entry_points.ini).
+*   Register the primitive in [entry_points.ini](./autovideo/entry_points.ini).
 *   Reinstall Autovideo with `pip3 install -e .`.
 *   Run `python3 -m d3m index search` and make sure that your primitive is in the list.
 *   Then you can use your primitive! You can play with the [pipeline](autovideo/utils/d3m_utils.py#L61) and add your primitive to the pipeline.

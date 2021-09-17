@@ -65,6 +65,6 @@ class RaySearcher(BaseSearcher):
         )
 
         # Get accuracy
-        valid_acc = compute_accuracy_with_preds(predictions['label'], valid_labels)
+        valid_acc = compute_accuracy_with_preds(predictions['label'], self.valid_labels)
         tune.report(accuracy=valid_acc)
 

@@ -1,11 +1,15 @@
 # AutoVideo: An Automated Video Action Recognition System
-<img width="500" src="docs/autovideo_logo.png" alt="Logo" />
+<img width="500" src="https://raw.githubusercontent.com/datamllab/autovideo/main/docs/autovideo_logo.png" alt="Logo" />
 
-AutoVideo is a system for automated video analysis. It is developed based on [D3M](https://gitlab.com/datadrivendiscovery/d3m) infrastructure, which describes machine learning with generic pipeline languages. Currently, it focuses on video action recognition, supporting various state-of-the-art video action recognition algorithms. It also supports automated model selection and hyperparameter tuning. AutoVideo is developed by [DATA Lab](http://faculty.cs.tamu.edu/xiahu/) at Texas A&M University.
+AutoVideo is a system for automated video analysis. It is developed based on [D3M](https://gitlab.com/datadrivendiscovery/d3m) infrastructure, which describes machine learning with generic pipeline languages. Currently, it focuses on video action recognition, supporting various state-of-the-art video action recognition algorithms. It also supports automated model selection and hyperparameter tuning. AutoVideo is developed by [DATA Lab](https://cs.rice.edu/~xh37/) at Rice University.
+
+*   Paper: [https://arxiv.org/abs/2108.04212](https://arxiv.org/abs/2108.04212)
+*   Tutorial: [[Towards Data Science] AutoVideo: An Automated Video Action Recognition System](https://towardsdatascience.com/autovideo-an-automated-video-action-recognition-system-43198beff99d)
+*   Related Project: [TODS: Automated Time-series Outlier Detection System](https://github.com/datamllab/tods)
 
 There are some other video analysis libraries out there, but this one is designed to be highly modular. AutoVideo is highly extendible thanks to the pipeline language, where each model is wrapped as a primitive with some hyperparameters. This allows us to easily support other algorithms for other video analysis tasks, which will be our future efforts. It is also convenient to search models and hyperparameters with the pipeline language.
 
-<img src="docs/demo.gif" alt="Demo" />
+<img src="https://raw.githubusercontent.com/datamllab/autovideo/main/docs/demo.gif" alt="Demo" />
 
 An overview of the library is shown as below. Each module in AutoVideo is wrapped as a primitive with some hyperparameters. A pipeline consists of a series of primitives from pre-processing to action recognition. AutoVideo is equipped with tuners to search models and hyperparameters. We welcome contributions to enrich AutoVideo with more primitives. You can find instructions in [Contributing Guide](./CONTRIBUTING.md).
 
@@ -14,8 +18,18 @@ An overview of the library is shown as below. Each module in AutoVideo is wrappe
 ## Cite this work
 If you find this repo useful, you may cite:
 
+Zha, Daochen, et al. "AutoVideo: An Automated Video Action Recognition System." arXiv preprint arXiv:2108.0421 (2021).
+```bibtex
+@article{zha2021autovideo,
+  title={AutoVideo: An Automated Video Action Recognition System},
+  author={Zha, Daochen and Bhat, Zaid and Chen, Yi-Wei and Wang, Yicheng and Ding, Sirui and Jain, Anmoll and Bhat, Mohammad and Lai, Kwei-Herng and Chen, Jiaben and Zou, Na and Hu, Xia},
+  journal={arXiv preprint arXiv:2108.04212},
+  year={2021}
+}
+```
+
 ## Installation
-Make sure that you have **Python 3.6** and **pip** installed. First, install `torch` and `torchvision` with
+Make sure that you have **Python 3.6** and **pip** installed. Currently the code is only tested in Linux system. First, install `torch` and `torchvision` with
 ```
 pip3 install torch
 pip3 install torchvision
@@ -39,7 +53,7 @@ pip3 install -e .
 ```
 
 ## Toy Examples
-To try the examples, you may download `hmdb6` dataset, which is a subset of `hmdb51` with only 51 classes. All the datasets can be downloaded from [Google Drive](https://drive.google.com/drive/folders/13oVPMyoBgNwEAsE_Ad3XVI1W5cNqfvrq). Then, you may unzip a dataset and put it in [datasets](datasets/).
+To try the examples, you may download `hmdb6` dataset, which is a subset of `hmdb51` with only 6 classes. All the datasets can be downloaded from [Google Drive](https://drive.google.com/drive/folders/13oVPMyoBgNwEAsE_Ad3XVI1W5cNqfvrq). Then, you may unzip a dataset and put it in [datasets](datasets/).
 ### Fitting and saving a pipeline
 ```
 python3 examples/fit.py
@@ -47,10 +61,10 @@ python3 examples/fit.py
 Some important hyperparameters are as follows.
 *   `--alg`: the supported algorithm. Currently we support `tsn`, `tsm`, `i3d`, `eco`, `eco_full`, `c3d`, `r2p1d`, and `r3d`.
 *   `--pretrained`: whether loading pre-trained weights and fine-tuning.
-*   `--gpu`: which gpu device tp use. Empty string for CPU. 
+*   `--gpu`: which gpu device to use. Empty string for CPU. 
 *   `--data_dir`: the directory of the dataset
 *   `--log_dir`: the path for sainge the log
-*   `--save_dir`: the path for saving the fitted pipeline
+*   `--save_path`: the path for saving the fitted pipeline
 
 ### Loading a fitted pipeline and producing predictions
 After fitting a pipeline, you can load a pipeline and make predictions.
@@ -58,10 +72,10 @@ After fitting a pipeline, you can load a pipeline and make predictions.
 python3 examples/produce.py
 ```
 Some important hyperparameters are as follows.
-*   `--gpu`: which gpu device tp use. Empty string for CPU. 
+*   `--gpu`: which gpu device to use. Empty string for CPU. 
 *   `--data_dir`: the directory of the dataset
-*   `--log_dir`: the path for sainge the log
-*   `--load_dir`: the path for loading the fitted pipeline
+*   `--log_dir`: the path for saving the log
+*   `--load_path`: the path for loading the fitted pipeline
 
 ### Loading a fitted pipeline and recogonizing actions
 After fitting a pipeline, you can also make predicitons on a single video. As a demo, you may download the fitted pipeline and the demo video from [Google Drive](https://drive.google.com/drive/folders/1j4iGUQG3m_TXbQ8mQnaR_teg1w0I2x60). Then, you can use the following command to recogonize the action in the video:
@@ -69,10 +83,10 @@ After fitting a pipeline, you can also make predicitons on a single video. As a 
 python3 examples/recogonize.py
 ```
 Some important hyperparameters are as follows.
-*   `--gpu`: which gpu device tp use. Empty string for CPU. 
+*   `--gpu`: which gpu device to use. Empty string for CPU. 
 *   `--video_path`: the path of video file
-*   `--log_dir`: the path for sainge the log
-*   `--load_dir`: the path for loading the fitted pipeline
+*   `--log_dir`: the path for saving the log
+*   `--load_path`: the path for loading the fitted pipeline
 
 ### Fitting and producing a pipeline
 Alternatively, you can do `fit` and `produce` without saving the model with
@@ -82,9 +96,9 @@ python3 examples/fit_produce.py
 Some important hyperparameters are as follows.
 *   `--alg`: the supported algorithm.
 *   `--pretrained`: whether loading pre-trained weights and fine-tuning.
-*   `--gpu`: which gpu device tp use. Empty string for CPU. 
+*   `--gpu`: which gpu device to use. Empty string for CPU. 
 *   `--data_dir`: the directory of the dataset
-*   `--log_dir`: the path for sainge the log
+*   `--log_dir`: the path for saving the log
 
 ### Automated searching
 In addition to running them by yourself, we also support automated model selection and hyperparameter tuning:
@@ -94,7 +108,7 @@ python3 examples/search.py
 Some important hyperparameters are as follows.
 *   `--alg`: the searching  algorithm. Currently, we support `random` and `hyperopt`.
 *   `--num_samples`: the number of samples to be tried
-*   `--gpu`: which gpu device tp use. Empty string for CPU. 
+*   `--gpu`: which gpu device to use. Empty string for CPU. 
 *   `--data_dir`: the directory of the dataset
 
 ## Supported Algorithms
@@ -134,6 +148,3 @@ d3mIndex,video,label
 8,brushing_hair_2_brush_hair_h_nm_np1_ba_med_2.avi,0
 ```
 The media folder should contain video files. You may refer to our example hmdb6 dataset in [Google Drive](https://drive.google.com/drive/folders/13oVPMyoBgNwEAsE_Ad3XVI1W5cNqfvrq). We have also prepared hmdb51 and ucf101 in the Google Drive for benchmarking. Please read [benchmark](docs/benchmark.md) for more details. For some of the algorithms (C3D, R2P1D and R3D), if you want to load the pre-trained weights and fine-tune, you need to download the weights from [Google Drive](https://drive.google.com/drive/folders/1fABdnH-l92q2RbA8hfQnUPZOYoTZCR-Q) and put it to [weights](weights).
-
-## Acknowledgement
-We gratefully acknowledge the Data Driven Discovery of Models (D3M) program of the Defense Advanced Research Projects Agency (DARPA).
