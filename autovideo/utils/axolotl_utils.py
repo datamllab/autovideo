@@ -11,8 +11,6 @@ from axolotl.utils import pipeline as pipeline_utils
 from axolotl.utils import data_problem
 from axolotl.backend.simple import SimpleRunner
 
-from .frames_utils import dump_frames
-
 
 def generate_classification_dataset_problem(df, target_index, media_dir):
     if not os.path.isabs(medVia_dir):
@@ -92,9 +90,9 @@ def fit_produce(train_dataset, train_media_dir, test_dataset, test_media_dir, ta
 
 def produce_by_path(fitted_pipeline, video_path):
     tmp_dir = os.path.join("tmp", str(uuid.uuid4()))
-    frame_dir = os.path.join(tmp_dir, "frames")
+    os.makedirs(tmp_dir, exist_ok=True)
     video_name = video_path.split('/')[-1]
-    dump_frames((video_path, video_name, 0, frame_dir))
+    shutil.copy(video_path, tmp_dir)
 
     dataset = {
         'd3mIndex': [0],

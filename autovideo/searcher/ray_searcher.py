@@ -2,7 +2,7 @@ import pandas as pd
 
 from ray import tune
 
-from autovideo.utils import build_pipeline, fit_produce, extract_frames, compute_accuracy_with_preds
+from autovideo.utils import build_pipeline, fit_produce, compute_accuracy_with_preds
 from .base import BaseSearcher
 
 class RaySearcher(BaseSearcher):
@@ -32,11 +32,6 @@ class RaySearcher(BaseSearcher):
 
         self.valid_labels = self.valid_dataset['label']
         self.valid_dataset = self.valid_dataset.drop(['label'], axis=1)
-        
-        # Extract frames from the video
-        video_ext = self.train_dataset.iloc[0, 1].split('.')[-1]
-        extract_frames(self.train_media_dir, video_ext)
-        extract_frames(self.valid_media_dir, video_ext)
             
         analysis = tune.run(
             self._evaluate,

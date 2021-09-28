@@ -25,13 +25,9 @@ def run(args):
     train_media_dir = os.path.join(args.data_dir, 'media')
     target_index = 2
 
-    from autovideo import fit, extract_frames, build_pipeline, compute_accuracy_with_preds
+    from autovideo import fit, build_pipeline, compute_accuracy_with_preds
     # Read the CSV file
     train_dataset = pd.read_csv(train_table_path)
-
-    # Extract frames from the video
-    video_ext = train_dataset.iloc[0, 1].split('.')[-1]
-    extract_frames(train_media_dir, video_ext)
 
     # Build pipeline based on configs
     # Here we can specify the hyperparameters defined in each primitive
