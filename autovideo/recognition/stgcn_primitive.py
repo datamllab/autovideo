@@ -1,5 +1,32 @@
 '''
 The code is derived from https://github.com/yysijie/st-gcn
+
+BSD 2-Clause License
+
+Copyright (c) 2017, Multimedia Laboratary, The Chinese University of Hong Kong
+All rights reserved.
+Copyright (c) 2021 DATA Lab at Texas A&M University
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 '''
 
 from logging import Logger
@@ -27,8 +54,8 @@ from torchvision import datasets, transforms
 
 from autovideo.base.supervised_base import SupervisedParamsBase, SupervisedHyperparamsBase, SupervisedPrimitiveBase
 #from autovideo.utils.transforms import *
-from autovideo.utils import wrap_predictions, construct_primitive_metadata, compute_accuracy, make_predictions_stgcn, get_frame_list, get_video_loader, adjust_learning_rate, logger
-from autovideo.utils.stgcn_utils import Feeder, show_iter_info, show_epoch_info, train_info, test_info, show_topk
+from autovideo.utils import wrap_predictions, construct_primitive_metadata, make_predictions_stgcn, logger
+from autovideo.utils.stgcn_utils import Feeder, show_iter_info, show_epoch_info, show_topk
 
 import autovideo.utils.stgcn_utils
 from autovideo.utils.stgcn_utils import get_skeleton_list, get_skeleton_train_valid,random_choose, random_move, auto_pading, weights_init, get_hop_distance, normalize_digraph, normalize_undigraph, downsample, temporal_slice, mean_subtractor, random_shift, openpose_match, top_k_by_category, adjust_lr
@@ -248,7 +275,7 @@ class STGCNPrimitive(SupervisedPrimitiveBase[Inputs, Outputs, Params, Hyperparam
                 top_k = [1,5]
                 for k in top_k:
                     show_topk(self.result, self.label, k, logger)
-
+                    
                 #test_info(self.iter_info, self.meta_info, self.epoch_info, log_interval, logger)
                 logger.info('Done.\n')
 
