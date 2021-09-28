@@ -47,6 +47,24 @@ def make_predictions(loader, model, device):
     confidences = torch.cat(confidences).cpu().detach().numpy()
     logger.info("Confidence Scores: {}".format(confidences))
     return preds
+
+def make_predictions_stgcn(loader, model, device):
+    preds = []
+    confidences = []
+    with torch.no_grad():
+        for test_data in loader:
+            test_data = test_data.float().to(device)
+            #test_label = test_label.long().to(device) #no use
+            outputs = model(test_data)
+            softmax = torch.nn.Softmax(dim =1)
+            outputs = softmax(outputs)
+            _, predicted = torch.max(outputs.data, 1)
+            preds.append(predicted)
+            confidences.append(outputs)          
+    preds = torch.cat(preds).cpu().detach().numpy()
+    confidences = torch.cat(confidences).cpu().detach().numpy()
+    logger.info("Confidence Scores: {}".format(confidences))
+    return preds
     
 def get_video_loader(video_list, modality, num_segments, batch_size, num_workers, crop_size=None, scale_size=None, input_mean=None, input_std=None, shuffle=False, test_mode=False, train_augmentation=False, input_format="NCHW"):
     #TODO: Modify Stack in transforms according to the architectures used. For now default value is False
