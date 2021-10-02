@@ -123,6 +123,7 @@ Some important hyperparameters are as follows.
 | ECO-Lite   | [autovideo/recognition/eco_primitive.py](autovideo/recognition/eco_primitive.py)           |  [ECO: Efficient Convolutional Network for Online Video Understanding](https://arxiv.org/abs/1804.09066)                 | 
 | ECO-Full   | [autovideo/recognition/eco_full_primitive.py](autovideo/recognition/eco_full_primitive.py) |  [ECO: Efficient Convolutional Network for Online Video Understanding](https://arxiv.org/abs/1804.09066)                 | 
 | I3D        | [autovideo/recognition/i3d_primitive.py](autovideo/recognition/i3d_primitive.py)           |  [Quo Vadis, Action Recognition? A New Model and the Kinetics Dataset](https://arxiv.org/abs/1705.07750)                 | 
+| STGCN (under testing, coming soon)      | [autovideo/recognition/stgcn_primitive.py](https://github.com/datamllab/autovideo/blob/Stgcn_Jiaben/autovideo/recognition/stgcn_primitive.py)           |  [Spatial Temporal Graph Convolutional Networks for Skeleton-Based Action Recognition](https://arxiv.org/abs/1801.07455)                 | 
 
 ## Advanced Usage
 Beyond the above examples, you can also customize the configurations.
