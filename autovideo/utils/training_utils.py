@@ -2,7 +2,7 @@ import numpy as np
 import torch
 import torchvision
 
-from .dataset import VideoDataSet
+from .dataset import VideoDataSet, SkeletonDataSet
 from .transforms import *
 
 from .logging_utils import logger
@@ -76,25 +76,46 @@ def get_video_loader(video_list, modality, num_segments, batch_size, num_workers
                                                    GroupRandomHorizontalFlip(is_flow=False)])
     
     data_loader = torch.utils.data.DataLoader(
-    VideoDataSet("",
-                 video_list,
-                 num_segments=num_segments, #Number of frames per video.(if >#actual frames, repeats first frame throughout)
-                 new_length=data_length,
-                 modality=modality,
-                 test_mode=test_mode,
-                 input_format=input_format,
-                 image_tmpl="img_{:05d}.jpg",# if self.hyperparams['modality'] in ["RGB", "RGBDiff"] else args.flow_prefix+"{}_{:05d}.jpg"
-                 transform=torchvision.transforms.Compose([
-                    augmentation,
-                    Stack(roll=False),
-                    ToTorchFormatTensor(),
-                    normalize,
-                 ])),
-                 batch_size=batch_size,
-                 shuffle=shuffle,
-                 num_workers=num_workers,
-                 pin_memory=True)
+        VideoDataSet(
+            "",
+            video_list,
+            num_segments=num_segments, #Number of frames per video.(if >#actual frames, repeats first frame throughout)
+            new_length=data_length,
+            modality=modality,
+            test_mode=test_mode,
+            input_format=input_format,
+            image_tmpl="img_{:05d}.jpg",# if self.hyperparams['modality'] in ["RGB", "RGBDiff"] else args.flow_prefix+"{}_{:05d}.jpg"
+            transform=torchvision.transforms.Compose([
+                augmentation,
+                Stack(roll=False),
+                ToTorchFormatTensor(),
+                normalize,
+            ])
+        ),
+        batch_size=batch_size,
+        shuffle=shuffle,
+        num_workers=num_workers,
+        pin_memory=True
+    )
     return data_loader
+
+def get_skeleton_loader(inputs, labels=None, random_choose=False, random_move=False, window_size=-1, batch_size=64, num_workers=1, test_mode=False, shuffle=True, drop_last=True):
+    data_loader = torch.utils.data.DataLoader(
+        SkeletonDataSet(
+            inputs=inputs,
+            labels=labels,
+            random_choose=random_choose,
+            window_size=window_size,
+            test_mode=test_mode
+        ),
+        batch_size=batch_size,
+        num_workers=num_workers,
+        shuffle=shuffle,
+        drop_last=drop_last
+    )
+
+    return data_loader
+
 
 def adjust_learning_rate(learning_rate, weight_decay, optimizer, epoch, lr_steps):
     """Sets the learning rate to the initial LR decayed by 10 every 20 or 30 epochs"""

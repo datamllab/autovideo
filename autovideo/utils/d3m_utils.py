@@ -64,6 +64,7 @@ def build_pipeline(config):
     from d3m import index
     from d3m.metadata.base import ArgumentType
     from d3m.metadata.pipeline import Pipeline, PrimitiveStep
+    algorithm = config.pop('algorithm', None)
     # Creating pipeline
     pipeline_description = Pipeline()
     pipeline_description.add_input(name='inputs')
@@ -102,14 +103,16 @@ def build_pipeline(config):
                                       data=['https://metadata.datadrivendiscovery.org/types/TrueTarget'])
     pipeline_description.add_step(step_4)
 
-    #Step 5: Extract frames by extension
-    step_5 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.autovideo.common.extract_frames'))
+    #Step 5: Extract frames by extension / directly load numpy
+    if algorithm == 'stgcn':
+        step_5 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.autovideo.common.numpy_loader'))
+    else:
+        step_5 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.autovideo.common.extract_frames'))
     step_5.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference=f'steps.{step_3.index}.produce')
     step_5.add_output('produce')
     pipeline_description.add_step(step_5)
 
     #Step 6: Video primitive
-    algorithm = config.pop('algorithm', None)
     alg_python_path = 'd3m.primitives.autovideo.recognition.' + algorithm
     step_6 = PrimitiveStep(primitive=index.get_primitive(alg_python_path))
     step_6.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference=f'steps.{step_5.index}.produce')

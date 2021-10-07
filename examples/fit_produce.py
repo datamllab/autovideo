@@ -6,7 +6,7 @@ import pandas as pd
 def argsparser():
     parser = argparse.ArgumentParser("Fitting a model for video recognition and producing the predictions")
     parser.add_argument('--alg', type=str, default='tsn',
-            choices=['tsn', 'tsm', 'i3d', 'eco', 'eco_full', 'c3d', 'r2p1d', 'r3d'])
+            choices=['tsn', 'tsm', 'i3d', 'eco', 'eco_full', 'c3d', 'r2p1d', 'r3d', 'stgcn'])
     parser.add_argument('--pretrained', action='store_true')
     parser.add_argument('--gpu', help='Which gpu device to use. Empty string for CPU', type=str, default='')
     parser.add_argument('--data_dir', help='The path of CSV file', type=str, default='datasets/hmdb6/')
