@@ -53,13 +53,13 @@ pip3 install -e .
 ```
 
 ## Toy Examples
-To try the examples, you may download `hmdb6` dataset, which is a subset of `hmdb51` with only 6 classes. All the datasets can be downloaded from [Google Drive](https://drive.google.com/drive/folders/13oVPMyoBgNwEAsE_Ad3XVI1W5cNqfvrq). Then, you may unzip a dataset and put it in [datasets](datasets/).
+To try the examples, you may download `hmdb6` dataset, which is a subset of `hmdb51` with only 6 classes. All the datasets can be downloaded from [Google Drive](https://drive.google.com/drive/folders/13oVPMyoBgNwEAsE_Ad3XVI1W5cNqfvrq). Then, you may unzip a dataset and put it in [datasets](datasets/). You may also try STGCN for skeleton-based action recogonition on `kinetics36`, which is a subset of Kinetics dataset with 36 classes. 
 ### Fitting and saving a pipeline
 ```
 python3 examples/fit.py
 ```
 Some important hyperparameters are as follows.
-*   `--alg`: the supported algorithm. Currently we support `tsn`, `tsm`, `i3d`, `eco`, `eco_full`, `c3d`, `r2p1d`, and `r3d`.
+*   `--alg`: the supported algorithm. Currently we support `tsn`, `tsm`, `i3d`, `eco`, `eco_full`, `c3d`, `r2p1d`, `r3d`, `stgcn`.
 *   `--pretrained`: whether loading pre-trained weights and fine-tuning.
 *   `--gpu`: which gpu device to use. Empty string for CPU. 
 *   `--data_dir`: the directory of the dataset
@@ -114,16 +114,16 @@ Some important hyperparameters are as follows.
 ## Supported Algorithms
 
 | Algorithms | Primitive Path                                                                             | Paper                                                                                                                    | 
-| :--------: | :----------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------- | 
-| TSN        | [autovideo/recognition/tsn_primitive.py](autovideo/recognition/tsn_primitive.py)           |  [Temporal Segment Networks: Towards Good Practices for Deep Action Recognition](https://arxiv.org/abs/1608.00859)       |
-| TSM        | [autovideo/recognition/tsm_primitive.py](autovideo/recognition/tsm_primitive.py)           |  [TSM: Temporal Shift Module for Efficient Video Understanding](https://arxiv.org/abs/1811.08383)                        |
+| :--------: | :----------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------- | 
+| TSN        | [autovideo/recognition/tsn_primitive.py](autovideo/recognition/tsn_primitive.py)           |  [Temporal Segment Networks: Towards Good Practices for Deep Action Recognition](https://arxiv.org/abs/1608.00859)            |
+| TSM        | [autovideo/recognition/tsm_primitive.py](autovideo/recognition/tsm_primitive.py)           |  [TSM: Temporal Shift Module for Efficient Video Understanding](https://arxiv.org/abs/1811.08383)                      |
 | R2P1D      | [autovideo/recognition/r2p1d_primitive.py](autovideo/recognition/r2p1d_primitive.py)       |  [A Closer Look at Spatiotemporal Convolutions for Action Recognition](https://arxiv.org/abs/1711.11248)                 |
-| R3D        | [autovideo/recognition/r3d_primitive.py](autovideo/recognition/r3d_primitive.py)           |  [Learning spatio-temporal features with 3d residual networks for action recognition](https://arxiv.org/abs/1708.07632)  |
-| C3D        | [autovideo/recognition/c3d_primitive.py](autovideo/recognition/c3d_primitive.py)           |  [Learning Spatiotemporal Features with 3D Convolutional Networks](https://arxiv.org/abs/1412.0767)                      | 
-| ECO-Lite   | [autovideo/recognition/eco_primitive.py](autovideo/recognition/eco_primitive.py)           |  [ECO: Efficient Convolutional Network for Online Video Understanding](https://arxiv.org/abs/1804.09066)                 | 
-| ECO-Full   | [autovideo/recognition/eco_full_primitive.py](autovideo/recognition/eco_full_primitive.py) |  [ECO: Efficient Convolutional Network for Online Video Understanding](https://arxiv.org/abs/1804.09066)                 | 
-| I3D        | [autovideo/recognition/i3d_primitive.py](autovideo/recognition/i3d_primitive.py)           |  [Quo Vadis, Action Recognition? A New Model and the Kinetics Dataset](https://arxiv.org/abs/1705.07750)                 | 
-| STGCN (under testing, coming soon)      | [autovideo/recognition/stgcn_primitive.py](https://github.com/datamllab/autovideo/blob/Stgcn_Jiaben/autovideo/recognition/stgcn_primitive.py)           |  [Spatial Temporal Graph Convolutional Networks for Skeleton-Based Action Recognition](https://arxiv.org/abs/1801.07455)                 | 
+| R3D        | [autovideo/recognition/r3d_primitive.py](autovideo/recognition/r3d_primitive.py)           |  [Learning spatio-temporal features with 3d residual networks for action recognition](https://arxiv.org/abs/1708.07632)    |
+| C3D        | [autovideo/recognition/c3d_primitive.py](autovideo/recognition/c3d_primitive.py)           |  [Learning Spatiotemporal Features with 3D Convolutional Networks](https://arxiv.org/abs/1412.0767)              | 
+| ECO-Lite   | [autovideo/recognition/eco_primitive.py](autovideo/recognition/eco_primitive.py)           |  [ECO: Efficient Convolutional Network for Online Video Understanding](https://arxiv.org/abs/1804.09066)                      | 
+| ECO-Full   | [autovideo/recognition/eco_full_primitive.py](autovideo/recognition/eco_full_primitive.py) |  [ECO: Efficient Convolutional Network for Online Video Understanding](https://arxiv.org/abs/1804.09066)                      | 
+| I3D        | [autovideo/recognition/i3d_primitive.py](autovideo/recognition/i3d_primitive.py)           |  [Quo Vadis, Action Recognition? A New Model and the Kinetics Dataset](https://arxiv.org/abs/1705.07750)                   | 
+| STGCN      | [autovideo/recognition/stgcn_primitive.py](autovideo/recognition/stgcn_primitive.py)       |  [Spatial Temporal Graph Convolutional Networks for Skeleton-Based Action Recognition](https://arxiv.org/abs/1801.07455)  | 
 
 ## Advanced Usage
 Beyond the above examples, you can also customize the configurations.
