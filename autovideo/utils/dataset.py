@@ -39,7 +39,7 @@ class VideoRecordTest(object):
 class VideoDataSet(data.Dataset):
     def __init__(self, root_path, video_list,
                  num_segments=3, new_length=1, modality='RGB',
-                 image_tmpl='img_{:05d}.jpg', transform=None,
+                 image_tmpl='img_{:05d}.jpg', transform=None, augment=None,
                  force_grayscale=False, random_shift=True, test_mode=False, input_format="NCHW"):
 
         self.root_path = root_path
@@ -49,6 +49,7 @@ class VideoDataSet(data.Dataset):
         self.modality = modality
         self.image_tmpl = image_tmpl
         self.transform = transform
+        self.augment = augment
         self.random_shift = random_shift
         self.test_mode = test_mode
         test_mode_g = self.test_mode

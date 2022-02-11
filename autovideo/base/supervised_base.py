@@ -58,6 +58,12 @@ class SupervisedPrimitiveBase(PrimitiveBase[Inputs, Outputs, Params, Hyperparams
         return CallResult(None)
     
     def set_training_data(self, *, inputs: Inputs, outputs: Outputs) -> None:
+        # right now only support one augmentation at one time
+        self._augmentation = False
+        if "augmentation" in list(inputs.columns):
+            self._augmentation = inputs["augmentation"][0]
+            inputs.drop("augmentation", axis=1, inplace=True) # drop augmentation
+
         self._inputs = inputs
         self._outputs = outputs
         self._frame_list = pd.concat([self._inputs, self._outputs], axis=1).to_numpy()

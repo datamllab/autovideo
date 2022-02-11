@@ -5,6 +5,7 @@ import pandas as pd
 
 def argsparser():
     parser = argparse.ArgumentParser("Fitting a model for video recognition")
+    parser.add_argument('--aug', type=str, default='channel_shuffle')
     parser.add_argument('--alg', type=str, default='tsn',
             choices=['tsn', 'tsm', 'i3d', 'eco', 'eco_full', 'c3d', 'r2p1d', 'r3d', 'stgcn'])
     parser.add_argument('--pretrained', action='store_true')
@@ -24,7 +25,7 @@ def run(args):
     train_media_dir = os.path.join(args.data_dir, 'media')
     target_index = 2
 
-    from autovideo import fit, build_pipeline, compute_accuracy_with_preds
+    from autovideo import fit, compute_accuracy_with_preds, test_augmentation
     # Read the CSV file
     train_dataset = pd.read_csv(train_table_path)
 
@@ -35,7 +36,7 @@ def run(args):
         "algorithm": args.alg,
         "load_pretrained": args.pretrained,
     }
-    pipeline = build_pipeline(config)
+    pipeline = test_augmentation(config, augmentation_method=args.aug)
 
     # Fit
     _, fitted_pipeline = fit(train_dataset=train_dataset,

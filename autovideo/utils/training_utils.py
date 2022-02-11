@@ -67,13 +67,13 @@ def get_video_loader(video_list, modality, num_segments, batch_size, num_workers
     else:
         if modality == 'RGB':
             augmentation = torchvision.transforms.Compose([GroupMultiScaleCrop(crop_size, [1, .875, .75, .66]),
-                                                   GroupRandomHorizontalFlip(is_flow=False)])
+                                                   GroupRandomHorizontalFlip(is_flow=False), GroupAugmentation(train_augmentation)])
         elif modality == 'Flow':
             augmentation = torchvision.transforms.Compose([GroupMultiScaleCrop(crop_size, [1, .875, .75]),
-                                                   GroupRandomHorizontalFlip(is_flow=True)])
+                                                   GroupRandomHorizontalFlip(is_flow=True), GroupAugmentation(train_augmentation)])
         elif modality == 'RGBDiff':
             augmentation = torchvision.transforms.Compose([GroupMultiScaleCrop(crop_size, [1, .875, .75]),
-                                                   GroupRandomHorizontalFlip(is_flow=False)])
+                                                   GroupRandomHorizontalFlip(is_flow=False), GroupAugmentation(train_augmentation)])
     
     data_loader = torch.utils.data.DataLoader(
         VideoDataSet(
