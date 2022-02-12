@@ -5,6 +5,19 @@ import numpy as np
 import numbers
 import math
 import torch
+import imgaug.augmenters as iaa
+
+class GroupAugmentation(object):
+    def __init__(self, augmentation):
+        self.worker = augmentation 
+    def __call__(self, img_group):
+        out_images = list()
+        for img in img_group:
+            img = np.array(img)
+            aug = self.worker(image=img)
+            aug = Image.fromarray(np.uint8(img)).convert('RGB')
+            out_images.append(aug)
+        return out_images
 
 
 class GroupRandomCrop(object):

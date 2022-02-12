@@ -1,17 +1,16 @@
 # AutoVideo: An Automated Video Action Recognition System
 <img width="500" src="https://raw.githubusercontent.com/datamllab/autovideo/main/docs/autovideo_logo.png" alt="Logo" />
 
-AutoVideo is a system for automated video analysis. It is developed based on [D3M](https://gitlab.com/datadrivendiscovery/d3m) infrastructure, which describes machine learning with generic pipeline languages. Currently, it focuses on video action recognition, supporting various state-of-the-art video action recognition algorithms. It also supports automated model selection and hyperparameter tuning. AutoVideo is developed by [DATA Lab](https://cs.rice.edu/~xh37/) at Rice University.
+AutoVideo is a system for automated video analysis. It is developed based on [D3M](https://gitlab.com/datadrivendiscovery/d3m) infrastructure, which describes machine learning with generic pipeline languages. Currently, it focuses on video action recognition, supporting a complete training pipeline consisting of data processing, video processing, video transformation, and action recognition. It also supports automated tuners for pipeline search. AutoVideo is developed by [DATA Lab](https://cs.rice.edu/~xh37/) at Rice University.
 
 *   Paper: [https://arxiv.org/abs/2108.04212](https://arxiv.org/abs/2108.04212)
+*   Demo Video: [https://youtu.be/vXpRfsdt1a0](https://youtu.be/vXpRfsdt1a0)
 *   Tutorial: [[Towards Data Science] AutoVideo: An Automated Video Action Recognition System](https://towardsdatascience.com/autovideo-an-automated-video-action-recognition-system-43198beff99d)
 *   Related Project: [TODS: Automated Time-series Outlier Detection System](https://github.com/datamllab/tods)
 
-There are some other video analysis libraries out there, but this one is designed to be highly modular. AutoVideo is highly extendible thanks to the pipeline language, where each model is wrapped as a primitive with some hyperparameters. This allows us to easily support other algorithms for other video analysis tasks, which will be our future efforts. It is also convenient to search models and hyperparameters with the pipeline language.
+There are some other video analysis libraries out there, but this one is designed to be highly modular. AutoVideo is highly extendible thanks to the pipeline language, where each module is wrapped as a primitive with some hyperparameters. This allows us to easily develop new modules. It is also convenient to perform pipeline search. We welcome contributions to enrich AutoVideo with more primitives. You can find instructions in [Contributing Guide](./CONTRIBUTING.md).
 
 <img src="https://raw.githubusercontent.com/datamllab/autovideo/main/docs/demo.gif" alt="Demo" />
-
-An overview of the library is shown as below. Each module in AutoVideo is wrapped as a primitive with some hyperparameters. A pipeline consists of a series of primitives from pre-processing to action recognition. AutoVideo is equipped with tuners to search models and hyperparameters. We welcome contributions to enrich AutoVideo with more primitives. You can find instructions in [Contributing Guide](./CONTRIBUTING.md).
 
 <img width="500" src="docs/overview.jpg" alt="Overview" />
 
@@ -52,7 +51,7 @@ cd autovideo
 pip3 install -e .
 ```
 
-## Toy Examples
+## Quick Start
 To try the examples, you may download `hmdb6` dataset, which is a subset of `hmdb51` with only 6 classes. All the datasets can be downloaded from [Google Drive](https://drive.google.com/drive/folders/13oVPMyoBgNwEAsE_Ad3XVI1W5cNqfvrq). Then, you may unzip a dataset and put it in [datasets](datasets/). You may also try STGCN for skeleton-based action recogonition on `kinetics36`, which is a subset of Kinetics dataset with 36 classes. 
 ### Fitting and saving a pipeline
 ```
@@ -111,7 +110,7 @@ Some important hyperparameters are as follows.
 *   `--gpu`: which gpu device to use. Empty string for CPU. 
 *   `--data_dir`: the directory of the dataset
 
-## Supported Algorithms
+## Supported Action Recogoniton Algorithms
 
 | Algorithms | Primitive Path                                                                             | Paper                                                                                                                    | 
 | :--------: | :----------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------- | 
@@ -124,6 +123,10 @@ Some important hyperparameters are as follows.
 | ECO-Full   | [autovideo/recognition/eco_full_primitive.py](autovideo/recognition/eco_full_primitive.py) |  [ECO: Efficient Convolutional Network for Online Video Understanding](https://arxiv.org/abs/1804.09066)                      | 
 | I3D        | [autovideo/recognition/i3d_primitive.py](autovideo/recognition/i3d_primitive.py)           |  [Quo Vadis, Action Recognition? A New Model and the Kinetics Dataset](https://arxiv.org/abs/1705.07750)                   | 
 | STGCN      | [autovideo/recognition/stgcn_primitive.py](autovideo/recognition/stgcn_primitive.py)       |  [Spatial Temporal Graph Convolutional Networks for Skeleton-Based Action Recognition](https://arxiv.org/abs/1801.07455)  | 
+
+## Supported Augmentation Primitives
+We have adapted all the augmentation methods in [imgaug](https://github.com/aleju/imgaug) to videos and wrap them as primitives. See [List of Augmentation Primitives](./docs/augmentation_primitives.md)
+
 
 ## Advanced Usage
 Beyond the above examples, you can also customize the configurations.

@@ -184,7 +184,7 @@ class R3DPrimitive(SupervisedPrimitiveBase[Inputs, Outputs, Params, Hyperparams]
                                         scale_size=112,
                                         input_mean=self.opt.mean,
                                         input_std=self.opt.std,
-                                        train_augmentation=True,
+                                        train_augmentation=self._augmentation,
                                         modality=self.hyperparams['modality'],
                                         num_segments=self.hyperparams['num_segments'],
                                         batch_size=self.hyperparams['batch_size'],

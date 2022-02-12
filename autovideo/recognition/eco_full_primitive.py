@@ -168,7 +168,7 @@ class ECOFullPrimitive(SupervisedPrimitiveBase[Inputs, Outputs, Params, Hyperpar
                                         scale_size=self.model.scale_size,
                                         input_mean=self.model.input_mean,
                                         input_std=self.model.input_std,
-                                        train_augmentation=True,
+                                        train_augmentation=self._augmentation,
                                         modality=self.hyperparams['modality'],
                                         num_segments=self.hyperparams['num_segments'],
                                         batch_size=self.hyperparams['batch_size'],

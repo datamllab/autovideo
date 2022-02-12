@@ -45,6 +45,7 @@ setup(
         'tamu_axolotl',
         'matplotlib',
         'mmcv',
+        'imgaug',
     ],
     package_data={
         'autovideo': [
