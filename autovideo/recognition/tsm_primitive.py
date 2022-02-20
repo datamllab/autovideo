@@ -224,8 +224,8 @@ class TSMPrimitive(SupervisedPrimitiveBase[Inputs, Outputs, Params, Hyperparams]
                     base_dict[v] = base_dict.pop(k)
             self.model.load_state_dict(base_dict)
         else:
-            self.model = TSM(400, self.hyperparams['num_segments'], self.hyperparams['modality'], base_model = 'resnet50', consensus_type = 'avg', img_feature_dim = 256 )
-            
+            self.model = TSM(400, self.hyperparams['num_segments'], self.hyperparams['modality'], base_model = 'resnet50', consensus_type = 'avg', img_feature_dim = 256, is_shift=True, non_local=False )
+        
         #For pre-trained model modify the last layer to output 51 for HMDB, 101 for UCF and so on.
         num_classes = len(np.unique(self._outputs.values))
         self.model.new_fc = nn.Linear(2048, num_classes)
@@ -292,7 +292,7 @@ class TSM(nn.Module):
         self.fc_lr5 = fc_lr5
         self.temporal_pool = temporal_pool
         self.non_local = non_local
-
+        self.print_spec = print_spec
         if not before_softmax and consensus_type != 'avg':
             raise ValueError("Only avg consensus can be used after Softmax")
 
@@ -311,9 +311,9 @@ class TSM(nn.Module):
         dropout_ratio:      {}
         img_feature_dim:    {}
             """.format(base_model, self.modality, self.num_segments, self.new_length, consensus_type, self.dropout, self.img_feature_dim)))
-
+        
         self._prepare_base_model(base_model)
-
+        
         feature_dim = self._prepare_tsn(num_class)
 
         if self.modality == 'Flow':
@@ -360,13 +360,13 @@ class TSM(nn.Module):
             self.base_model = getattr(torchvision.models, base_model)(True if self.pretrain == 'imagenet' else False)
             if self.is_shift:
                 print('Adding temporal shift...')
-                from .TSM.ops.temporal_shift import make_temporal_shift
+                from .tsm_utils.temporal_shift import make_temporal_shift
                 make_temporal_shift(self.base_model, self.num_segments,
                                     n_div=self.shift_div, place=self.shift_place, temporal_pool=self.temporal_pool)
 
             if self.non_local:
                 print('Adding non-local module...')
-                from .TSM.ops.non_local import make_non_local
+                from .tsm_utils.non_local import make_non_local
                 make_non_local(self.base_model, self.num_segments)
 
             self.base_model.last_layer_name = 'fc'
@@ -384,7 +384,7 @@ class TSM(nn.Module):
                 self.input_std = self.input_std + [np.mean(self.input_std) * 2] * 3 * self.new_length
 
         elif base_model == 'mobilenetv2':
-            from .archs.mobilenet_v2 import mobilenet_v2, InvertedResidual
+            from .tsm_utils.mobilenet_v2 import mobilenet_v2, InvertedResidual
             self.base_model = mobilenet_v2(True if self.pretrain == 'imagenet' else False)
 
             self.base_model.last_layer_name = 'classifier'
@@ -394,7 +394,7 @@ class TSM(nn.Module):
 
             self.base_model.avgpool = nn.AdaptiveAvgPool2d(1)
             if self.is_shift:
-                from .TSM.ops.temporal_shift import TemporalShift
+                from .tsm_utils.temporal_shift import TemporalShift
                 for m in self.base_model.modules():
                     if isinstance(m, InvertedResidual) and len(m.conv) == 8 and m.use_res_connect:
                         if self.print_spec:
@@ -408,7 +408,7 @@ class TSM(nn.Module):
                 self.input_std = self.input_std + [np.mean(self.input_std) * 2] * 3 * self.new_length
 
         elif base_model == 'BNInception':
-            from .archs.bn_inception import bninception
+            from .tsm_utils.bn_inception import bninception
             self.base_model = bninception(pretrained=self.pretrain)
             self.input_size = self.base_model.input_size
             self.input_mean = self.base_model.mean
