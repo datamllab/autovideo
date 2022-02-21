@@ -22,17 +22,16 @@ import imgaug.augmenters as iaa
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
-__all__ = ('ChannelShufflePrimitive',)
+__all__ = ('ElasticTransformPrimitive',)
 
 Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
-    p = hyperparams.Constant[float](
-        default=0.35,
-        description='Minimum workers to extract frames simultaneously',
+    severity = hyperparams.Constant[int](
+        default=2,
+        description=' Strength of the corruption, with valid values being',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
-
     seed = hyperparams.Constant[int](
         default=0,
         description='Minimum workers to extract frames simultaneously',
@@ -40,19 +39,17 @@ class Hyperparams(hyperparams.Hyperparams):
     )
 
 
-
-class ChannelShufflePrimitive(AugmentationPrimitiveBase[Inputs, Hyperparams]):
+class ElasticTransformPrimitive(AugmentationPrimitiveBase[Inputs, Hyperparams]):
     """
-    A primitive which extracts frames from media dir based on video extension.
+    A primitive which Wrapper around ElasticTransform().
     """
 
-    metadata = construct_primitive_metadata("augmentation", "meta_channel_shuffle")
+    metadata = construct_primitive_metadata("augmentation", "imgcorruptlike_ElasticTransform")
 
     def _get_function(self):
         """
         set up function and parameter of functions
         """
-        p = self.hyperparams["p"]
         seed = self.hyperparams["seed"]
-        return iaa.ChannelShuffle(p=0, seed=seed)
-
+        severity = self.hyperparams["severity"]
+        return iaa.ElasticTransform(severity=severity,seed=seed)

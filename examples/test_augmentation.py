@@ -5,7 +5,7 @@ import pandas as pd
 
 def argsparser():
     parser = argparse.ArgumentParser("Fitting a model for video recognition")
-    parser.add_argument('--aug', type=str, default='meta_channel_shuffle')
+    parser.add_argument('--aug', type=str, default='meta_ChannelShuffle')
     parser.add_argument('--alg', type=str, default='tsn',
             choices=['tsn', 'tsm', 'i3d', 'eco', 'eco_full', 'c3d', 'r2p1d', 'r3d', 'stgcn'])
     parser.add_argument('--pretrained', action='store_true')
