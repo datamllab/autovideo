@@ -9,7 +9,7 @@ def argsparser():
     parser.add_argument('--alg', type=str, default='tsn',
             choices=['tsn', 'tsm', 'i3d', 'eco', 'eco_full', 'c3d', 'r2p1d', 'r3d', 'stgcn'])
     parser.add_argument('--pretrained', action='store_true')
-    parser.add_argument('--gpu', help='Which gpu device to use. Empty string for CPU', type=str, default='0')
+    parser.add_argument('--gpu', help='Which gpu device to use. Empty string for CPU', type=str, default='2')
     parser.add_argument('--data_dir', help='The path of CSV file', type=str, default='datasets/hmdb6/')
     parser.add_argument('--log_path', help='The path of saving logs', type=str, default='log.txt')
     parser.add_argument('--save_path', help='The path for saving the trained pipeline', type=str, default='fitted_pipeline')
