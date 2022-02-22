@@ -125,8 +125,30 @@ Some important hyperparameters are as follows.
 | STGCN      | [autovideo/recognition/stgcn_primitive.py](autovideo/recognition/stgcn_primitive.py)       |  [Spatial Temporal Graph Convolutional Networks for Skeleton-Based Action Recognition](https://arxiv.org/abs/1801.07455)  | 
 
 ## Supported Augmentation Primitives
-We have adapted all the augmentation methods in [imgaug](https://github.com/aleju/imgaug) to videos and wrap them as primitives. See [List of Augmentation Primitives](./docs/augmentation_primitives.md)
+We have adapted all the augmentation methods in [imgaug](https://github.com/aleju/imgaug) to videos and wrap them as primitives. Some examples are as below.
+| Augmentation Method                | Primitive Path                                                                                                                                           |
+| :--------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| AddElementwise                     | [autovideo/augmentation/arithmetic/AddElementwise_primitive.py](../autovideo/augmentation/arithmetic/AddElementwise_primitive.py)                                          |
+| Cartoon                            | [autovideo/augmentation/artistic/Cartoon_primitive.py](../autovideo/augmentation/artistic/Cartoon_primitive.py)                                                            |
+| BlendAlphaBoundingBoxes            | [autovideo/augmentation/blend/BlendAlphaBoundingBoxes_primitive.py](../autovideo/augmentation/artistic/BlendAlphaBoundingBoxes_primitive.py)                               |
+| AverageBlur                        | [autovideo/augmentation/blend/AverageBlur_primitive.py](../autovideo/augmentation/blur/AverageBlur_primitive.py)                                                           |
+| AddToBrightness                    | [autovideo/augmentation/color/AddToBrightness_primitive.py](../autovideo/augmentation/color/AddToBrightness_primitive.py)                                                  |
+| AllChannelsCLAHE                   | [autovideo/augmentation/contrast/AllChannelsCLAHE_primitive.py](../autovideo/augmentation/color/AllChannelsCLAHE_primitive.py)                                             |
+| DirectedEdgeDetect                 | [autovideo/augmentation/convolutional/DirectedEdgeDetect_primitive.py](../autovideo/augmentation/convolutional/DirectedEdgeDetect_primitive.py)                            |
+| DirectedEdgeDetect                 | [autovideo/augmentation/convolutional/DirectedEdgeDetect_primitive.py](../autovideo/augmentation/convolutional/DirectedEdgeDetect_primitive.py)                            |
+| SaveDebugImageEveryNBatches        | [autovideo/augmentation/edges/SaveDebugImageEveryNBatches_primitive.py](../autovideo/augmentation/edges/SaveDebugImageEveryNBatches_primitive.py)                          |
+| Canny                              | [autovideo/augmentation/debug/Canny_primitive.py](../autovideo/augmentation/debug/Canny_primitive.py)                                                                      |
+| Fliplr                             | [autovideo/augmentation/debug/Fliplr_primitive.py](../autovideo/augmentation/debug/Fliplr_primitive.py)                                                                    |
+| Affine                             | [autovideo/augmentation/geometric/Affine_primitive.py](../autovideo/augmentation/geometric/Affine_primitive.py)                                                            |
+| Brightness                         | [autovideo/augmentation/imgcorruptlike/Brightness_primitive.py](../autovideo/augmentation/imgcorruptlike/Brightness_primitive.py)                                          |
+| ChannelShuffle                     | [autovideo/augmentation/meta/ChannelShuffle_primitive.py](../autovideo/augmentation/meta/ChannelShuffle_primitive.py)                                                      |
+| Autocontrast                       | [autovideo/augmentation/pillike/Autocontrast_primitive.py](../autovideo/augmentation/pillike/Autocontrast_primitive.py)                                                    |
+| AveragePooling                     | [autovideo/augmentation/pooling/AveragePooling_primitive.py](../autovideo/augmentation/pooling/AveragePooling_primitive.py)                                                |
+| RegularGridVoronoi                 | [autovideo/augmentation/segmentation/RegularGridVoronoi_primitive.py](../autovideo/augmentation/segmentation/RegularGridVoronoi_primitive.py)                              |
+| CenterCropToAspectRatio            | [autovideo/augmentation/size/CenterCropToAspectRatio_primitive.py](../autovideo/augmentation/size/CenterCropToAspectRatio_primitive.py)                                    |
+| Clouds                             | [autovideo/augmentation/weather/Clouds_primitive.py](../autovideo/augmentation/weather/Clouds_primitive.py)                                                                |
 
+See the [Full List of Augmentation Primitives](./docs/augmentation_primitives.md)
 
 ## Advanced Usage
 Beyond the above examples, you can also customize the configurations.
