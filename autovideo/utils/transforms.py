@@ -19,6 +19,12 @@ class GroupAugmentation(object):
             out_images.append(aug)
         return out_images
 
+class GroupTransformation(object):
+    def __init__(self, transformation):
+        self.worker = transformation
+
+    def __call__(self, img_group):
+        return [self.worker(img) for img in img_group]
 
 class GroupRandomCrop(object):
     def __init__(self, size):

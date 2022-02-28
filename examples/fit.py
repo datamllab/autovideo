@@ -24,7 +24,7 @@ def run(args):
     train_media_dir = os.path.join(args.data_dir, 'media')
     target_index = 2
 
-    from autovideo import fit, build_pipeline, compute_accuracy_with_preds
+    from autovideo import fit, build_pipeline2, compute_accuracy_with_preds
     # Read the CSV file
     train_dataset = pd.read_csv(train_table_path)
 
@@ -32,10 +32,17 @@ def run(args):
     # Here we can specify the hyperparameters defined in each primitive
     # The default hyperparameters will be used if not specified
     config = {
+        "augmentation": [
+            ("meta_ChannelShuffle", ),
+            ("blur_GaussianBlur",),
+            ("flip_Fliplr", ),
+            ("imgcorruptlike_GaussianNoise", ),
+        ],
+        "multi_aug": "meta_Sometimes",
         "algorithm": args.alg,
         "load_pretrained": args.pretrained,
     }
-    pipeline = build_pipeline(config)
+    pipeline = build_pipeline2(config)
 
     # Fit
     _, fitted_pipeline = fit(train_dataset=train_dataset,

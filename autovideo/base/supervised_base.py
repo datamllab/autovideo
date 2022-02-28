@@ -64,6 +64,11 @@ class SupervisedPrimitiveBase(PrimitiveBase[Inputs, Outputs, Params, Hyperparams
             self._augmentation = inputs["augmentation"][0]
             inputs.drop("augmentation", axis=1, inplace=True) # drop augmentation
 
+        self._transformation = False
+        if "transformation" in list(inputs.columns):
+            self._transformation = inputs["transformation"][0]
+            inputs.drop("transformation", axis=1, inplace=True) # drop augmentation
+
         self._inputs = inputs
         self._outputs = outputs
         self._frame_list = pd.concat([self._inputs, self._outputs], axis=1).to_numpy()

@@ -34,9 +34,13 @@ class AugmentationPrimitiveBase(transformer.TransformerPrimitiveBase[Inputs, Out
 
     def produce(self, *, inputs: Inputs, timeout: float = None, iterations: int = None) -> base.CallResult[Outputs]:
         function = self._get_function() 
-        aug = [function]
-        aug.extend(["" for i in range(inputs.shape[0]-1)]) # only store in the first row
-        inputs["augmentation"] = aug
+        if "augmentation" in inputs.keys():
+            next_null_idx = inputs[inputs["augmentation"].isnull()].index.tolist()[0]
+            inputs["augmentation"][next_null_idx] = function
+        else:
+            aug = [function]
+            aug.extend([None for i in range(inputs.shape[0]-1)]) # only store in the first row
+            inputs["augmentation"] = aug
         output = Outputs(inputs)
         return base.CallResult(output)
 

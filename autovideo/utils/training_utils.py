@@ -48,7 +48,7 @@ def make_predictions(loader, model, device):
     logger.info("Confidence Scores: {}".format(confidences))
     return preds
     
-def get_video_loader(video_list, modality, num_segments, batch_size, num_workers, crop_size=None, scale_size=None, input_mean=None, input_std=None, shuffle=False, test_mode=False, train_augmentation=False, input_format="NCHW"):
+def get_video_loader(video_list, modality, num_segments, batch_size, num_workers, crop_size=None, scale_size=None, input_mean=None, input_std=None, shuffle=False, test_mode=False, train_transformation=False, train_augmentation=False, input_format="NCHW"):
     #TODO: Modify Stack in transforms according to the architectures used. For now default value is False
     if modality != 'RGBDiff':
         normalize = GroupNormalize(input_mean, input_std)
@@ -60,20 +60,29 @@ def get_video_loader(video_list, modality, num_segments, batch_size, num_workers
         data_length = 5
     
     
-    if train_augmentation == False: #shuffle false for validation and test set
+    if train_augmentation == False or train_transformation == False: #shuffle false for validation and test set
         augmentation = torchvision.transforms.Compose([
             GroupScale(int(scale_size)),
             GroupCenterCrop(crop_size),])
     else:
         if modality == 'RGB':
-            augmentation = torchvision.transforms.Compose([GroupMultiScaleCrop(crop_size, [1, .875, .75, .66]),
-                                                   GroupRandomHorizontalFlip(is_flow=False), GroupAugmentation(train_augmentation)])
+            augmentation = torchvision.transforms.Compose([
+                                                   GroupTransformation(train_transformation),
+                                                   GroupMultiScaleCrop(crop_size, [1, .875, .75, .66]),
+                                                   GroupRandomHorizontalFlip(is_flow=False), 
+                                                   GroupAugmentation(train_augmentation)])
         elif modality == 'Flow':
-            augmentation = torchvision.transforms.Compose([GroupMultiScaleCrop(crop_size, [1, .875, .75]),
-                                                   GroupRandomHorizontalFlip(is_flow=True), GroupAugmentation(train_augmentation)])
+            augmentation = torchvision.transforms.Compose([
+                                                   GroupTransformation(train_transformation),
+                                                   GroupMultiScaleCrop(crop_size, [1, .875, .75]),
+                                                   GroupRandomHorizontalFlip(is_flow=True), 
+                                                   GroupAugmentation(train_augmentation)])
         elif modality == 'RGBDiff':
-            augmentation = torchvision.transforms.Compose([GroupMultiScaleCrop(crop_size, [1, .875, .75]),
-                                                   GroupRandomHorizontalFlip(is_flow=False), GroupAugmentation(train_augmentation)])
+            augmentation = torchvision.transforms.Compose([
+                                                   GroupTransformation(train_transformation),
+                                                   GroupMultiScaleCrop(crop_size, [1, .875, .75]),
+                                                   GroupRandomHorizontalFlip(is_flow=False), 
+                                                   GroupAugmentation(train_augmentation)])
     
     data_loader = torch.utils.data.DataLoader(
         VideoDataSet(
