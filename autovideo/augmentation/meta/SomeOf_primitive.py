@@ -29,13 +29,13 @@ __all__ = ("SomeOfPrimitive")
 
 
 class Hyperparams(hyperparams.Hyperparams):
-    n = hyperparams.Constant(
+    n = hyperparams.Hyperparams(
         default=2,
         description='Count of augmenters to apply.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
 
     )
-    random_order = hyperparams.Constant[bool](
+    random_order = hyperparams.Hyperparams[bool](
         default=False,
         description='Random shuffle the order for each batch',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],

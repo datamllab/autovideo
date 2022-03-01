@@ -70,7 +70,7 @@ def test_augmentation(config, augmentation_methods=["meta_ChannelShuffle", "blur
     step_5.add_output('produce')
     pipeline_description.add_step(step_5)
 
-    step_6 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.autovideo.transformation.RandomCrop'))
+    step_6 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.autovideo.transformation.Scale'))
     step_6.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference=f'steps.{step_5.index}.produce')
     step_6.add_output('produce')
     pipeline_description.add_step(step_6)

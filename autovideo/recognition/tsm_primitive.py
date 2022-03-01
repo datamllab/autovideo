@@ -143,6 +143,7 @@ class TSMPrimitive(SupervisedPrimitiveBase[Inputs, Outputs, Params, Hyperparams]
                                         scale_size=self.model.scale_size,
                                         input_mean=self.model.input_mean,
                                         input_std=self.model.input_std,
+                                        train_transformation=self._transformation,
                                         train_augmentation=self._augmentation,
                                         modality=self.hyperparams['modality'],
                                         num_segments=self.hyperparams['num_segments'],

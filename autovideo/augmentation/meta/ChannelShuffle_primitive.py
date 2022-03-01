@@ -27,7 +27,7 @@ __all__ = ('ChannelShufflePrimitive',)
 Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
-    p = hyperparams.Constant[float](
+    p = hyperparams.Hyperparameter(
         default=0.35,
         description='Probability of shuffling channels in any given image.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],

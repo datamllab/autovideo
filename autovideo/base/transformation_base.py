@@ -38,9 +38,9 @@ class TransformationPrimitiveBase(transformer.TransformerPrimitiveBase[Inputs, O
             next_null_idx = inputs[inputs["transformation"].isnull()].index.tolist()[0]
             inputs["transformation"][next_null_idx] = function
         else:
-            aug = [function]
-            aug.extend([None for i in range(inputs.shape[0]-1)]) # only store in the first row
-            inputs["transformation"] = aug
+            trans = [function]
+            trans.extend([None for i in range(inputs.shape[0]-1)]) # only store in the first row
+            inputs["transformation"] = trans
         output = Outputs(inputs)
         return base.CallResult(output)
 

@@ -5,6 +5,7 @@ from urllib.parse import urlparse
 
 import pandas as pd
 import torch
+import torchvision
 
 from d3m import container
 from d3m.primitive_interfaces.base import *
@@ -66,7 +67,11 @@ class SupervisedPrimitiveBase(PrimitiveBase[Inputs, Outputs, Params, Hyperparams
 
         self._transformation = False
         if "transformation" in list(inputs.columns):
-            self._transformation = inputs["transformation"][0]
+            not_null_idx = inputs[inputs["transformation"].notnull()].index.tolist()
+            transform_list = []
+            for i in not_null_idx:
+                transform_list.append(inputs["transformation"][i])
+            self._transformation = torchvision.transforms.Compose(transform_list) 
             inputs.drop("transformation", axis=1, inplace=True) # drop augmentation
 
         self._inputs = inputs

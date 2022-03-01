@@ -58,6 +58,8 @@ def _update_predictions_metadata(inputs_metadata: metadata_base.DataMetadata, ou
 
     return outputs_metadata
 
+
+
 def build_pipeline(config):
     """Build a pipline based on the config
     """
@@ -65,97 +67,26 @@ def build_pipeline(config):
     from d3m.metadata.base import ArgumentType
     from d3m.metadata.pipeline import Pipeline, PrimitiveStep
     algorithm = config.pop('algorithm', None)
-    # Creating pipeline
-    pipeline_description = Pipeline()
-    pipeline_description.add_input(name='inputs')
-
-    #Step 0: Denormalise
-    step_0 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.autovideo.common.denormalize'))
-    step_0.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='inputs.0')
-    step_0.add_output('produce')
-    pipeline_description.add_step(step_0)
-
-    #Step 1: Dataset to DataFrame
-    step_1 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.autovideo.common.dataset_to_dataframe'))
-    step_1.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference=f'steps.{step_0.index}.produce')
-    step_1.add_output('produce')
-    pipeline_description.add_step(step_1)
-
-    #Step 2: Column Parser
-    step_2 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.autovideo.common.column_parser'))
-    step_2.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference=f'steps.{step_1.index}.produce')
-    step_2.add_output('produce')
-    pipeline_description.add_step(step_2)
-
-    #Step 3: Extract columns by semantic types - Attributes
-    step_3 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.autovideo.common.extract_columns_by_semantic_types'))
-    step_3.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference=f'steps.{step_2.index}.produce')
-    step_3.add_output('produce')
-    step_3.add_hyperparameter(name='semantic_types', argument_type=ArgumentType.VALUE,
-                                      data=['https://metadata.datadrivendiscovery.org/types/Attribute'])
-    pipeline_description.add_step(step_3)
-
-    #Step 4: Extract Columns by semantic types - Target
-    step_4 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.autovideo.common.extract_columns_by_semantic_types'))
-    step_4.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference=f'steps.{step_1.index}.produce')
-    step_4.add_output('produce')
-    step_4.add_hyperparameter(name='semantic_types', argument_type=ArgumentType.VALUE,
-                                      data=['https://metadata.datadrivendiscovery.org/types/TrueTarget'])
-    pipeline_description.add_step(step_4)
-
-    #Step 5: Extract frames by extension / directly load numpy
-    if algorithm == 'stgcn':
-        step_5 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.autovideo.common.numpy_loader'))
-    else:
-        step_5 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.autovideo.common.extract_frames'))
-    step_5.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference=f'steps.{step_3.index}.produce')
-    step_5.add_output('produce')
-    pipeline_description.add_step(step_5)
-
-    #Step 6: Video primitive
-    alg_python_path = 'd3m.primitives.autovideo.recognition.' + algorithm
-    step_6 = PrimitiveStep(primitive=index.get_primitive(alg_python_path))
-    step_6.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference=f'steps.{step_5.index}.produce')
-    step_6.add_argument(name='outputs', argument_type=ArgumentType.CONTAINER, data_reference=f'steps.{step_4.index}.produce')
-    # Add hyperparameters
-    for key, value in config.items():
-        step_6.add_hyperparameter(name=key, argument_type=ArgumentType.VALUE, data=value)
-    step_6.add_output('produce')
-    pipeline_description.add_step(step_6)
-
-    #Step 7: Construct the predictions
-    step_7 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.autovideo.common.construct_predictions'))
-    step_7.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference=f'steps.{step_6.index}.produce')
-    step_7.add_argument(name='reference', argument_type=ArgumentType.CONTAINER, data_reference=f'steps.{step_2.index}.produce')
-    step_7.add_output('produce')
-    step_7.add_hyperparameter(name = 'use_columns', argument_type=ArgumentType.VALUE, data = [0,1])
-    pipeline_description.add_step(step_7)
-
-    # Final Output
-    pipeline_description.add_output(name='output predictions', data_reference=f'steps.{step_7.index}.produce')
-
-    return pipeline_description
-
-
-def build_pipeline2(config):
-    """Build a pipline based on the config
-    """
-    from d3m import index
-    from d3m.metadata.base import ArgumentType
-    from d3m.metadata.pipeline import Pipeline, PrimitiveStep
-    algorithm = config.pop('algorithm', None)
+    transformation = config.pop('transformation', None)
+    transformation_methods = [transformation[i][0] for i in range(len(transformation))]
     augmentation = config.pop('augmentation', None)
     augmentation_methods = [augmentation[i][0] for i in range(len(augmentation))]
     if len(augmentation[0]) > 1:
-        augmentation_configs = [augmentation[i][1] for i in range(len(augmentation))]
+        augmentation_configs = []
+        for i in range(len(augmentation)):
+            try:
+                augmentation_configs.append(augmentation[i][1])
+            except:
+                augmentation_configs.append(None)
+        #augmentation_configs = [augmentation[i][1] for i in range(len(augmentation))]
     else:
         augmentation_configs = None
     multi_aug = config.pop('multi_aug', 'meta_Sequential')
 
-    print(augmentation)
-    print(augmentation_methods)
-    print(augmentation_configs)
-    print(multi_aug)
+    if len(transformation[0]) > 1:
+        transformation_configs = [transformation[i][1] for i in range(len(transformation))]
+    else:
+        transformation_configs = None
 
     # Creating pipeline
     pipeline_description = Pipeline()
@@ -204,31 +135,33 @@ def build_pipeline2(config):
     step_5.add_output('produce')
     pipeline_description.add_step(step_5)
 
+    curr_step_no = int(f'{step_5.index}')
+    for i in range(len(transformation_methods)):
+        alg_python_path = 'd3m.primitives.autovideo.transformation.' + transformation_methods[i]
+        step_transformation = PrimitiveStep(primitive=index.get_primitive(alg_python_path))
+        step_transformation.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.'+str(curr_step_no)+'.produce')
+        if transformation_configs[i] != None:
+            for key in transformation_configs[i]:
+                value = transformation_configs[i][key]
+                step_transformation.add_hyperparameter(name=key, argument_type=ArgumentType.VALUE, data=value)
+        step_transformation.add_output('produce')
+        pipeline_description.add_step(step_transformation)
+        curr_step_no += 1
 
     # Step 6: Video Augmentation
-    curr_step_no = int(f'{step_5.index}')
     for i in range(len(augmentation_methods)):
         alg_python_path = 'd3m.primitives.autovideo.augmentation.' + augmentation_methods[i]
         step_augmentation = PrimitiveStep(primitive=index.get_primitive(alg_python_path))
         step_augmentation.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.'+str(curr_step_no)+'.produce')
-        #for key, value in augmentation_configs[i].items():
-        #    step_augmentation.add_hyperparameter(name=key, argument_type=ArgumentType.VALUE, data=value)
+        if augmentation_configs[i] != None:
+            for key in augmentation_configs[i]:
+                value = augmentation_configs[i][key]
+                step_augmentation.add_hyperparameter(name=key, argument_type=ArgumentType.VALUE, data=value)
         step_augmentation.add_output('produce')
         pipeline_description.add_step(step_augmentation)
         curr_step_no += 1
-    print(pipeline_description.steps)
 
-    # Step 7: Video Augmentation
-    alg_python_path = 'd3m.primitives.autovideo.augmentation.' + augmentation_methods[1]
-    step_7 = PrimitiveStep(primitive=index.get_primitive(alg_python_path))
-    step_7.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.'+str(curr_step_no)+'.produce')
-    #for key, value in config.items():
-    #    step_6.add_hyperparameter(name=key, argument_type=ArgumentType.VALUE, data=value)
-    step_7.add_output('produce')
-    pipeline_description.add_step(step_7)
-    curr_step_no += 1
-
-    # Step 7: Integraying MultiAugmentation 
+    # Step 7: Integrating MultiAugmentation 
     alg_python_path = 'd3m.primitives.autovideo.augmentation.'+multi_aug
     step_7 = PrimitiveStep(primitive=index.get_primitive(alg_python_path))
     step_7.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.'+str(curr_step_no)+'.produce')

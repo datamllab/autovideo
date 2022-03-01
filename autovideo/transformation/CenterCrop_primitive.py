@@ -20,10 +20,11 @@ from d3m.metadata import hyperparams
 
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.transformation_base import TransformationPrimitiveBase
+import torchvision
 import random
 import numbers
 
-__all__ = ('RandomCropPrimitive',)
+__all__ = ('CenterCropPrimitive',)
 
 Inputs = container.DataFrame
 
@@ -34,38 +35,16 @@ class Hyperparams(hyperparams.Hyperparams):
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
-    seed = hyperparams.Hyperparameter(
-        default=0,
-        description='Minimum workers to extract frames simultaneously',
-        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
-    )
-
-
-class RandomCropPrimitive(TransformationPrimitiveBase[Inputs, Hyperparams]):
+class CenterCropPrimitive(TransformationPrimitiveBase[Inputs, Hyperparams]):
     """
     A primitive which Add values to the pixels of images with possibly different values for neighbouring pixels.
     """
 
-    metadata = construct_primitive_metadata("transformation", "RandomCrop")
+    metadata = construct_primitive_metadata("transformation", "CenterCrop")
 
     def _get_function(self):
         """
         set up function and parameter of functions
         """
-        def random_crop(img): 
-            if isinstance(self.hyperparams["size"], numbers.Number):
-                self.size = (int(self.hyperparams["size"]), int(self.hyperparams["size"]))
-            else:
-                self.size = self.hyperparams["size"]
-            w, h = img.size
-            th, tw = self.size
-
-            x1 = random.randint(0, abs(w - tw))
-            y1 = random.randint(0, abs(h - th))
-
-            assert(img.size[0] == w and img.size[1] == h)
-            if w == tw and h == th:
-                return img
-            else:
-                return img.crop((x1, y1, x1 + tw, y1 + th))
-        return random_crop 
+        size = self.hyperparams["size"]
+        return torchvision.transforms.CenterCrop(size)
