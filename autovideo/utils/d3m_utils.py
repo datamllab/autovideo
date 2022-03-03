@@ -63,6 +63,16 @@ def _update_predictions_metadata(inputs_metadata: metadata_base.DataMetadata, ou
 def build_pipeline(config):
     """Build a pipline based on the config
     """
+    default_config = {
+        "transformation": [],
+        "augmentation": [],
+        "multi_aug": None,
+        "algorithm": "tsn",
+    }
+    for key in config:
+        default_config[key] = config[key]
+    config = default_config
+
     from d3m import index
     from d3m.metadata.base import ArgumentType
     from d3m.metadata.pipeline import Pipeline, PrimitiveStep
@@ -71,7 +81,7 @@ def build_pipeline(config):
     transformation_methods = [transformation[i][0] for i in range(len(transformation))]
     augmentation = config.pop('augmentation', None)
     augmentation_methods = [augmentation[i][0] for i in range(len(augmentation))]
-    if len(augmentation[0]) > 1:
+    if len(augmentation) > 0 and len(augmentation[0]) > 1:
         augmentation_configs = []
         for i in range(len(augmentation)):
             try:
@@ -83,7 +93,7 @@ def build_pipeline(config):
         augmentation_configs = None
     multi_aug = config.pop('multi_aug', 'meta_Sequential')
 
-    if len(transformation[0]) > 1:
+    if len(transformation) > 0 and len(transformation[0]) > 1:
         transformation_configs = [transformation[i][1] for i in range(len(transformation))]
     else:
         transformation_configs = None
@@ -162,20 +172,21 @@ def build_pipeline(config):
         curr_step_no += 1
 
     # Step 7: Integrating MultiAugmentation 
-    alg_python_path = 'd3m.primitives.autovideo.augmentation.'+multi_aug
-    step_7 = PrimitiveStep(primitive=index.get_primitive(alg_python_path))
-    step_7.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.'+str(curr_step_no)+'.produce')
-    #for key, value in config.items():
-    #    step_6.add_hyperparameter(name=key, argument_type=ArgumentType.VALUE, data=value)
-    step_7.add_output('produce')
-    pipeline_description.add_step(step_7)
-    curr_step_no += 1
+    if multi_aug != None:
+        alg_python_path = 'd3m.primitives.autovideo.augmentation.'+multi_aug
+        step_7 = PrimitiveStep(primitive=index.get_primitive(alg_python_path))
+        step_7.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.'+str(curr_step_no)+'.produce')
+        #for key, value in config.items():
+        #    step_6.add_hyperparameter(name=key, argument_type=ArgumentType.VALUE, data=value)
+        step_7.add_output('produce')
+        pipeline_description.add_step(step_7)
+        curr_step_no += 1
 
 
     #Step 8: Video primitive
     alg_python_path = 'd3m.primitives.autovideo.recognition.' + algorithm
     step_8 = PrimitiveStep(primitive=index.get_primitive(alg_python_path))
-    step_8.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference=f'steps.{step_7.index}.produce')
+    step_8.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.'+str(curr_step_no)+'.produce')
     step_8.add_argument(name='outputs', argument_type=ArgumentType.CONTAINER, data_reference=f'steps.{step_4.index}.produce')
     # Add hyperparameters
     for key, value in config.items():
