@@ -65,6 +65,27 @@ Some important hyperparameters are as follows.
 *   `--log_dir`: the path for sainge the log
 *   `--save_path`: the path for saving the fitted pipeline
 
+In AutoVideo, all the pipelines can be described as Python Dictionaries. In `examplers/fit.py`, the default pipline is defined below.
+```python
+config = {
+	"transformation":[
+		("RandomCrop", {"size": (128,128)}),
+		("Scale", {"size": (128,128)}),
+	],
+	"augmentation": [
+		("meta_ChannelShuffle", {"p": 0.5} ),
+		("blur_GaussianBlur",),
+		("flip_Fliplr", ),
+		("imgcorruptlike_GaussianNoise", ),
+	],
+	"multi_aug": "meta_Sometimes",
+	"algorithm": "tsn",
+	"load_pretrained": False,
+	"epochs": 50,
+}
+```
+This pipeline describes what transformation and augmentation primitives will be used, and also how the multiple augmentation primitives are combined. It also specifies using TSN to train 50 epochs from scratch. The hyperparameters can be flexibly configured based on the hyperparameters defined in each primitive.
+
 ### Loading a fitted pipeline and producing predictions
 After fitting a pipeline, you can load a pipeline and make predictions.
 ```

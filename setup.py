@@ -46,6 +46,7 @@ setup(
         'matplotlib',
         'mmcv',
         'imgaug',
+        'imagecorruptions',
     ],
     package_data={
         'autovideo': [
