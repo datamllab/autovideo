@@ -27,13 +27,13 @@ __all__ = ('AdditiveLaplaceNoisePrimitive',)
 Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
-    scale = hyperparams.Set[float](
+    scale = hyperparams.Hyperparameter[tuple](
         default=(0, 15),
         description='Standard deviation of the normal distribution that generates the noise. Must be >=0. If 0 then loc will simply be added to all pixels.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
-    per_channel = hyperparams.Constant[bool](
+    per_channel = hyperparams.Hyperparameter[bool](
         default=True,
         description='Whether to use (imagewise) the same sample(s) for all channels (False) or to sample value(s) for each channel (True). Setting this to True will therefore lead to different transformations per image and channel, otherwise only per image.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],

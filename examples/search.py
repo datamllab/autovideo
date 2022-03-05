@@ -40,7 +40,22 @@ def run(args):
 
     #Search Space
     search_space = {
+        "augmentation": {
+            "aug_0": tune.choice([
+                ("arithmetic_AdditiveGaussianNoise",),
+                ("arithmetic_AdditiveLaplaceNoise",),
+            ]),
+            "aug_1": tune.choice([
+                ("geometric_Rotate",),
+                ("geometric_Jigsaw",),
+            ]),
+        },
+        "multi_aug": tune.choice([
+            "meta_Sometimes",
+            "meta_Sequential",
+        ]),
         "algorithm": tune.choice(["tsn"]),
+        "epochs": tune.choice([1]),
         "learning_rate": tune.uniform(0.0001, 0.001),
         "momentum": tune.uniform(0.9,0.99),
         "weight_decay": tune.uniform(5e-4,1e-3),

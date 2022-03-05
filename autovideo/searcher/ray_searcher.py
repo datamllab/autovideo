@@ -32,7 +32,9 @@ class RaySearcher(BaseSearcher):
 
         self.valid_labels = self.valid_dataset['label']
         self.valid_dataset = self.valid_dataset.drop(['label'], axis=1)
-            
+
+        search_space = flatten_search_space(search_space)
+
         analysis = tune.run(
             self._evaluate,
             config=search_space,
@@ -43,10 +45,12 @@ class RaySearcher(BaseSearcher):
             name=config["searching_algorithm"]+"_"+str(config["num_samples"])
         )
         best_config = analysis.get_best_config(metric="accuracy")
+        best_config = unflatten_config(best_config)
         
         return best_config
 
     def _evaluate(self, config):
+        config = unflatten_config(config)
         pipeline = build_pipeline(config)
 
         # Fit and produce
@@ -62,4 +66,26 @@ class RaySearcher(BaseSearcher):
         # Get accuracy
         valid_acc = compute_accuracy_with_preds(predictions['label'], self.valid_labels)
         tune.report(accuracy=valid_acc)
+
+def flatten_search_space(search_space):
+    flattened_search_space = {}
+    augmentation = search_space.pop("augmentation", {})
+    for key in augmentation:
+        flattened_search_space["augmentation:"+key] = augmentation[key]
+    for key in search_space:
+        flattened_search_space[key] = search_space[key]
+    
+    return flattened_search_space
+
+def unflatten_config(config):
+    unflattened_config = {}
+    for key in config:
+        if key.startswith("augmentation"):
+            if "augmentation" not in unflattened_config:
+                unflattened_config["augmentation"] = []
+            unflattened_config["augmentation"].append(config[key])
+        else:
+            unflattened_config[key] = config[key]
+
+    return unflattened_config
 

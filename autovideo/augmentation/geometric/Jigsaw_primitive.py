@@ -28,19 +28,19 @@ Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
 
-    nb_rows = hyperparams.Set[int](
+    nb_rows = hyperparams.Hyperparameter[tuple](
         default=(3, 10),
         description="How many rows the jigsaw pattern should have.",
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
-    nb_cols = hyperparams.Set[int](
+    nb_cols = hyperparams.Hyperparameter[tuple](
         default=(3, 10),
         description="How many cols the jigsaw pattern should have.",
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
-    max_steps = hyperparams.Set[int](
+    max_steps = hyperparams.Hyperparameter[tuple](
         default=(1, 5),
         description="How many steps each jigsaw cell may be moved.",
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],

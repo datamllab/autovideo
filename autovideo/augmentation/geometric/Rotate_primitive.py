@@ -28,7 +28,7 @@ Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
 
-    rotate = hyperparams.Set[int](
+    rotate = hyperparams.Hyperparameter[tuple](
         default=(-45, 45),
         description="See Affine.",
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
