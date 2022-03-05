@@ -1,6 +1,7 @@
 # AutoVideo: An Automated Video Action Recognition System
 <img width="500" src="https://raw.githubusercontent.com/datamllab/autovideo/main/docs/autovideo_logo.png" alt="Logo" />
 
+[![Testing](https://github.com/datamllab/autovideo/actions/workflows/python-package.yml/badge.svg)](https://github.com/datamllab/autovideo/actions/workflows/python-package.yml)
 [![PyPI version](https://badge.fury.io/py/autovideo.svg)](https://badge.fury.io/py/autovideo)
 [![Downloads](https://pepy.tech/badge/autovideo)](https://pepy.tech/project/autovideo)
 [![Downloads](https://pepy.tech/badge/autovideo/month)](https://pepy.tech/project/autovideo)
