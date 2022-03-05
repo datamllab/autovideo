@@ -1,6 +1,11 @@
 # AutoVideo: An Automated Video Action Recognition System
 <img width="500" src="https://raw.githubusercontent.com/datamllab/autovideo/main/docs/autovideo_logo.png" alt="Logo" />
 
+[![PyPI version](https://badge.fury.io/py/autovideo.svg)](https://badge.fury.io/py/autovideo)
+[![Downloads](https://pepy.tech/badge/autovideo)](https://pepy.tech/project/autovideo)
+[![Downloads](https://pepy.tech/badge/autovideo/month)](https://pepy.tech/project/autovideo)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 AutoVideo is a system for automated video analysis. It is developed based on [D3M](https://gitlab.com/datadrivendiscovery/d3m) infrastructure, which describes machine learning with generic pipeline languages. Currently, it focuses on video action recognition, supporting a complete training pipeline consisting of data processing, video processing, video transformation, and action recognition. It also supports automated tuners for pipeline search. AutoVideo is developed by [DATA Lab](https://cs.rice.edu/~xh37/) at Rice University.
 
 *   Paper: [https://arxiv.org/abs/2108.04212](https://arxiv.org/abs/2108.04212)
@@ -130,6 +135,31 @@ Some important hyperparameters are as follows.
 *   `--num_samples`: the number of samples to be tried
 *   `--gpu`: which gpu device to use. Empty string for CPU. 
 *   `--data_dir`: the directory of the dataset
+
+Search sapce can also be specified as Python Dictionaries. An example:
+```python
+search_space = {
+	"augmentation": {
+		"aug_0": tune.choice([
+			("arithmetic_AdditiveGaussianNoise",),
+			("arithmetic_AdditiveLaplaceNoise",),
+		]),
+		"aug_1": tune.choice([
+			("geometric_Rotate",),
+			("geometric_Jigsaw",),
+		]),
+	},
+	"multi_aug": tune.choice([
+		"meta_Sometimes",
+		"meta_Sequential",
+	]),
+	"algorithm": tune.choice(["tsn"]),
+	"learning_rate": tune.uniform(0.0001, 0.001),
+	"momentum": tune.uniform(0.9,0.99),
+	"weight_decay": tune.uniform(5e-4,1e-3),
+	"num_segments": tune.choice([8,16,32]),
+}
+```
 
 ## Supported Action Recogoniton Algorithms
 

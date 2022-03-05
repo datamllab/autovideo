@@ -55,7 +55,6 @@ def run(args):
             "meta_Sequential",
         ]),
         "algorithm": tune.choice(["tsn"]),
-        "epochs": tune.choice([1]),
         "learning_rate": tune.uniform(0.0001, 0.001),
         "momentum": tune.uniform(0.9,0.99),
         "weight_decay": tune.uniform(5e-4,1e-3),
