@@ -27,12 +27,12 @@ __all__ = ('CenterPadToFixedSizePrimitive',)
 Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
-    width = hyperparams.Constant[int](
+    width = hyperparams.Hyperparameter[int](
         default=20,
         description='Pad images up to this minimum width.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
-    height = hyperparams.Constant[int](
+    height = hyperparams.Hyperparameter[int](
         default=30,
         description='Pad images up to this minimum height.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],

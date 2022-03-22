@@ -28,7 +28,7 @@ Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
 
-    p = hyperparams.Constant[float](
+    p = hyperparams.Hyperparameter[float](
         default=0.5,
         description='Probability of each image to get flipped.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],

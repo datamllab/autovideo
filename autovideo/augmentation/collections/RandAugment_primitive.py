@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -28,15 +28,21 @@ Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
 
-    n = hyperparams.Constant[int](
+    n = hyperparams.Hyperparameter[typing.Union[int,tuple,list]](
         default=2,
         description='number of transformations to apply.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
-    m = hyperparams.Constant[int](
-        default=9,
+    m = hyperparams.Hyperparameter[typing.Union[int,tuple,list]](
+        default=(6,12),
         description='magnitude/severity/strength of the applied transformations in interval [0 .. 30] with M=0 being the weakest.',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+
+    cval = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=128,
+        description='The constant value to use when filling in newly created pixels.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
@@ -61,6 +67,7 @@ class RandAugmentPrimitive(AugmentationPrimitiveBase[Inputs, Hyperparams]):
         """
         n = self.hyperparams["n"]
         m = self.hyperparams["m"]
+        cval = self.hyperparams['cval']
         seed = self.hyperparams["seed"]
-        return iaa.RandAugment(n=n, m=m, seed=seed)
+        return iaa.RandAugment(n=n, m=m, cval=cval,seed=seed)
 

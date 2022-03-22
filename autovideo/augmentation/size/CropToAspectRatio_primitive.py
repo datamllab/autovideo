@@ -27,7 +27,7 @@ __all__ = ('CropToAspectRatioPrimitive',)
 Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
-    aspect_ratio = hyperparams.Constant[float](
+    aspect_ratio = hyperparams.Hyperparameter[float](
         default=2.0,
         description='The desired aspect ratio, given as width/height',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],

@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -27,22 +27,30 @@ __all__ = ('ReplaceElementwisePrimitive',)
 Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
-    replacement = hyperparams.List[int](
-        default=[0,255],
-        description=' The size of the lower resolution image from which to sample the replacement mask in percent of the input image. ',
+    mask = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=0.1,
+        description='Mask that indicates the pixels that are supposed to be replaced.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
+
+    replacement = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=[0,255],
+        description='The replacement to use at all locations that are marked as 1 in the mask.',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+
+    per_channel = hyperparams.Hyperparameter[typing.Union[bool,float]](
+        default=False,
+        description='Whether to use (imagewise) the same sample(s) for all channels (False) or to sample value(s) for each channel (True). Setting this to True will therefore lead to different transformations per image and channel, otherwise only per image.',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+
     seed = hyperparams.Constant[int](
         default=0,
         description='Minimum workers to extract frames simultaneously',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
-    mask = hyperparams.Constant[float](
-        default=0.1,
-        description='The probability of an image to be inverted.',
-        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
-    )
-
+    
 
 class ReplaceElementwisePrimitive(AugmentationPrimitiveBase[Inputs, Hyperparams]):
     """
@@ -58,4 +66,5 @@ class ReplaceElementwisePrimitive(AugmentationPrimitiveBase[Inputs, Hyperparams]
         seed = self.hyperparams["seed"]
         mask = self.hyperparams["mask"]
         replacement = self.hyperparams["replacement"]
-        return iaa.ReplaceElementwise(mask=mask,replacement=replacement,seed=seed)
+        per_channel = self.hyperparams['per_channel']
+        return iaa.ReplaceElementwise(mask=mask,replacement=replacement,per_channel=per_channel,seed=seed)

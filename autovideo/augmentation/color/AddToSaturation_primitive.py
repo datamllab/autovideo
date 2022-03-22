@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -28,8 +28,8 @@ Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
 
-    value = hyperparams.Set[int](
-        default= (-50, 50),
+    value = hyperparams.Hyperparameter[typing.Union[int,tuple,list]](
+        default= (-75, 75),
         description='Value to add to the saturation of all pixels. It is expected to be in the range -255 to +255.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )

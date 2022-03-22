@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -29,14 +29,26 @@ Inputs = container.DataFrame
 class Hyperparams(hyperparams.Hyperparams):
 
     per_channel = hyperparams.Constant[bool](
-        default=True,
+        default=False,
         description='Whether to sample per image only one value from value and use it for both hue and saturation (False) or to sample independently one value for hue and one for saturation (True).',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
-    value = hyperparams.Set[int](
+    value = hyperparams.Hyperparameter[typing.Union[int,tuple,list,None]](
         default= (-50, 50),
-        description='Inverse multiplier to use for the saturation values. High values denote stronger color removal. E.g. 1.0 will remove all saturation, 0.0 will remove nothing. Expected value range is [0.0, 1.0].',
+        description='Value to add to the hue and saturation of all pixels',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+
+    value_hue = hyperparams.Hyperparameter[typing.Union[int,tuple,list,None]](
+        default= None,
+        description='Value to add to the hue of all pixels',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+
+    value_saturation = hyperparams.Hyperparameter[typing.Union[int,tuple,list,None]](
+        default= None,
+        description='Value to add to the saturation of all pixels.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
@@ -61,6 +73,8 @@ class AddToHueAndSaturationPrimitive(AugmentationPrimitiveBase[Inputs, Hyperpara
         """
         value = self.hyperparams['value']
         per_channel = self.hyperparams['per_channel']
+        value_hue = self.hyperparams['value_hue']
+        value_saturation = self.hyperparams['value_saturation']
         seed = self.hyperparams["seed"]
-        return iaa.AddToHueAndSaturation(value=value, per_channel=per_channel, seed=seed)
+        return iaa.AddToHueAndSaturation(value=value,value_hue=value_hue, value_saturation=value_saturation,per_channel=per_channel, seed=seed)
 

@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -28,8 +28,8 @@ Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
 
-    k = hyperparams.Constant[int](
-        default=5,
+    k = hyperparams.Hyperparameter[typing.Union[int,tuple,list]](
+        default=(1,7),
         description='Kernel size to use.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )

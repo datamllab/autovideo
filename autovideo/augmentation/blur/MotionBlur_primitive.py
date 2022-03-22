@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -28,14 +28,20 @@ Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
 
-    k = hyperparams.Constant[int](
-        default=15,
+    k = hyperparams.Hyperparameter[typing.Union[int,tuple,list]](
+        default=(3,7),
         description='Kernel size to use.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
-    angle = hyperparams.List[int](
-        default=[-45, 45],
+    angle = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=(0, 360),
+        description='Angle of the motion blur in degrees (clockwise, relative to top center direction).',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+
+    direction = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=(-1.0, 1.0),
         description='Angle of the motion blur in degrees (clockwise, relative to top center direction).',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
@@ -61,6 +67,7 @@ class MotionBlurPrimitive(AugmentationPrimitiveBase[Inputs, Hyperparams]):
         """
         k = self.hyperparams["k"]
         angle = self.hyperparams["angle"]
+        direction = self.hyperparams['direction']
         seed = self.hyperparams["seed"]
-        return iaa.MotionBlur(k=k, angle=angle, seed=seed)
+        return iaa.MotionBlur(k=k, angle=angle,direction=direction, seed=seed)
 

@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -28,19 +28,19 @@ Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
 
-    d = hyperparams.Set[int](
-        default=(3, 10),
+    d = hyperparams.Hyperparameter[typing.Union[int,tuple,list]](
+        default=(1, 9),
         description='High values for d lead to significantly worse performance. Values equal or less than 10 seem to be good. Use <5 for real-time applications.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
-    sigma_color = hyperparams.Set[int](
+    sigma_color = hyperparams.Hyperparameter[typing.Union[int,tuple,list]](
         default=(10, 250),
         description='Filter sigma in the color space with value range [1, inf). A large value of the parameter means that farther colors within the pixel neighborhood (see sigma_space) will be mixed together, resulting in larger areas of semi-equal color.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
-    sigma_space = hyperparams.Set[int](
+    sigma_space = hyperparams.Hyperparameter[typing.Union[int,tuple,list]](
         default=(10, 250),
         description='Filter sigma in the coordinate space with value range [1, inf). A large value of the parameter means that farther pixels will influence each other as long as their colors are close enough (see sigma_color).',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],

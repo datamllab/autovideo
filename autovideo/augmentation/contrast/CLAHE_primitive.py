@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -28,15 +28,21 @@ Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
 
-    clip_limit = hyperparams.Set[float](
-        default=(1, 10),
+    clip_limit = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=(0.1, 8),
         description=" Clipping limit. Higher values result in stronger contrast. OpenCV uses a default of 40, though values around 5 seem to already produce decent contrast.",
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
-    tile_grid_size_px = hyperparams.Set[float](
-        default=(3, 21),
+    tile_grid_size_px = hyperparams.Hyperparameter[typing.Union[int,tuple,list]](
+        default=(3, 12),
         description="Kernel size, i.e. size of each local neighbourhood in pixels.",
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+
+    tile_grid_size_px_min = hyperparams.Hyperparameter[int](
+        default=3,
+        description="See imgaug.augmenters.contrast.CLAHE",
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 

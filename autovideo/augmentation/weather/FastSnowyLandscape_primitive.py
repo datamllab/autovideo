@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -27,12 +27,12 @@ __all__ = ('FastSnowyLandscapePrimitive',)
 Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
-    lightness_threshold  = hyperparams.Constant[int](
+    lightness_threshold  = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
         default=140,
         description='All pixels with lightness in HLS colorspace that is below this value will have their lightness increased by lightness_multiplier.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
-    lightness_multiplier = hyperparams.Constant[float](
+    lightness_multiplier = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
         default=2.5,
         description='Multiplier for pixel lightness value in HLS colorspace. ',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],

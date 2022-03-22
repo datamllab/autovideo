@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -27,17 +27,18 @@ __all__ = ('RelativeRegularGridVoronoiPrimitive',)
 Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
-    n_rows_frac = hyperparams.Constant[float](
-        default=0.1,
+    n_rows_frac = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=(0.01,0.1),
         description='Relative number of coordinates to place on the y-axis.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
-    n_cols_frac = hyperparams.Constant[float](
-        default=0.25,
+    n_cols_frac = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=0.2,
         description='Relative number of coordinates to place on the x-axis. ',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
+    
     seed = hyperparams.Constant[int](
         default=0,
         description='Minimum workers to extract frames simultaneously',

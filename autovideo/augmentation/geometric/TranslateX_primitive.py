@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -28,15 +28,33 @@ Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
 
-    px = hyperparams.Set[int](
+    px = hyperparams.Hyperparameter[typing.Union[int,tuple,list,None]](
         default=(-20, 20),
         description="Analogous to translate_px in Affine, except that this translation value only affects the x-axis. No dictionary input is allowed.",
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
-    percent = hyperparams.Set[float](
-        default=(-0.1, 0.1),
+    percent = hyperparams.Hyperparameter[typing.Union[int,tuple,list,None]](
+        default=None,
         description="Analogous to translate_percent in Affine, except that this translation value only affects the x-axis. No dictionary input is allowed.",
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+
+    order = hyperparams.Hyperparameter[typing.Union[int,list]](
+        default=1,
+        description="interpolation order to use",
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+
+    cval = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=(0,255),
+        description=" The constant value to use when filling in newly created pixels.",
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+
+    mode = hyperparams.Hyperparameter[typing.Union[str,list]](
+        default='constant',
+        description="Method to use when filling in newly created pixels",
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
@@ -61,6 +79,9 @@ class TranslateXPrimitive(AugmentationPrimitiveBase[Inputs, Hyperparams]):
         """
         px = self.hyperparams["px"]
         percent = self.hyperparams["percent"]
+        order = self.hyperparams["order"]
+        cval = self.hyperparams["cval"]
+        mode = self.hyperparams["mode"]
         seed = self.hyperparams["seed"]
-        return iaa.TranslateX(px=px, percent=percent, seed=seed)
+        return iaa.TranslateX(px=px, percent=percent, seed=seed, order=order, cval=cval, mode=mode)
 

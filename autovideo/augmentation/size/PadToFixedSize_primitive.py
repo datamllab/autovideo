@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -27,12 +27,12 @@ __all__ = ('PadToFixedSizePrimitive',)
 Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
-    width = hyperparams.Constant[int](
+    width = hyperparams.Hyperparameter[typing.Union[int,None]](
         default=100,
         description='Pad images up to this minimum width.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
-    height = hyperparams.Constant[int](
+    height = hyperparams.Hyperparameter[typing.Union[int,None]](
         default=100,
         description='Pad images up to this minimum height.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],

@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -27,6 +27,12 @@ __all__ = ('EnhanceContrastPrimitive',)
 Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
+    factor = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=(0.5,1.5),
+        description='Strength of contrast in the image',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+
     seed = hyperparams.Constant[int](
         default=0,
         description='Minimum workers to extract frames simultaneously',
@@ -45,5 +51,6 @@ class EnhanceContrastPrimitive(AugmentationPrimitiveBase[Inputs, Hyperparams]):
         """
         set up function and parameter of functions
         """
+        factor = self.hyperparams['factor']
         seed = self.hyperparams["seed"]
-        return iaa.EnhanceContrast(seed=seed)
+        return iaa.EnhanceContrast(factor=factor,seed=seed)

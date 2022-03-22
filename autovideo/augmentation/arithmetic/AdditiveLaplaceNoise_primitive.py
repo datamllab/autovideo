@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -27,14 +27,20 @@ __all__ = ('AdditiveLaplaceNoisePrimitive',)
 Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
-    scale = hyperparams.Hyperparameter[tuple](
+    loc = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=0,
+        description='Mean of the normal distribution from which the noise is sampled.',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+
+    scale = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
         default=(0, 15),
         description='Standard deviation of the normal distribution that generates the noise. Must be >=0. If 0 then loc will simply be added to all pixels.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
-    per_channel = hyperparams.Hyperparameter[bool](
-        default=True,
+    per_channel = hyperparams.Hyperparameter[typing.Union[bool,float]](
+        default=False,
         description='Whether to use (imagewise) the same sample(s) for all channels (False) or to sample value(s) for each channel (True). Setting this to True will therefore lead to different transformations per image and channel, otherwise only per image.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
@@ -60,5 +66,6 @@ class AdditiveLaplaceNoisePrimitive(AugmentationPrimitiveBase[Inputs, Hyperparam
     
         scale = self.hyperparams["scale"]
         per_channel = self.hyperparams["per_channel"]
+        loc = self.hyperparams['loc']
         seed = self.hyperparams["seed"]
-        return iaa.AdditiveLaplaceNoise(scale=scale, per_channel=per_channel, seed=seed)
+        return iaa.AdditiveLaplaceNoise(scale=scale, loc=loc,per_channel=per_channel, seed=seed)

@@ -27,11 +27,6 @@ __all__ = ('ClipCBAsToImagePlanesPrimitive',)
 Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
-    p = hyperparams.Constant[float](
-        default=0.35,
-        description='Probability of shuffling channels in any given image.',
-        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
-    )
 
     seed = hyperparams.Constant[int](
         default=0,

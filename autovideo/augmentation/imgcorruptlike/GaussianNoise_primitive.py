@@ -18,7 +18,6 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -27,7 +26,7 @@ __all__ = ('GaussianNoisePrimitive',)
 Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
-    severity = hyperparams.Constant[int](
+    severity = hyperparams.Hyperparameter[int](
         default=2,
         description=' Strength of the corruption, with valid values being',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],

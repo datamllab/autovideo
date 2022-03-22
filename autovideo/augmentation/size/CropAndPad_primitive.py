@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -27,27 +27,37 @@ __all__ = ('CropAndPadPrimitive',)
 Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
-    percent = hyperparams.Set[float](
+    px = hyperparams.Hyperparameter[typing.Union[int,tuple,None]](
+        default=None,
+        description='The number of pixels to crop (negative values) or pad (positive values) on each side of the image. ',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+
+    percent = hyperparams.Hyperparameter[typing.Union[float,tuple,None]](
         default=(0, 0.2),
         description='The number of pixels to crop (negative values) or pad (positive values) on each side of the image given as a fraction of the image height/width. ',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
-    pad_cval = hyperparams.Set[int](
+    pad_mode = hyperparams.Enumeration(
+        values=['constant','edge','linear_ramp', 'maximum', 'median', 'minimum', 'reflect', 'symmetric', 'wrap'],
+        default='constant',
+        description="Interpolation to use.",
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+
+    pad_cval = hyperparams.Hyperparameter[typing.Union[float,tuple,list,None]](
         default=(0, 128),
         description='The constant value to use if the pad mode is constant or the end value to use if the mode is linear_ramp.  ',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
+
     seed = hyperparams.Constant[int](
         default=0,
         description='Minimum workers to extract frames simultaneously',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
-    px = hyperparams.Set[int](
-        default=(-10, 10),
-        description='The number of pixels to crop (negative values) or pad (positive values) on each side of the image. ',
-        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
-    )
+    
 
 
 
@@ -63,4 +73,4 @@ class CropAndPadPrimitive(AugmentationPrimitiveBase[Inputs, Hyperparams]):
         """
         set up function and parameter of functions
         """
-        return iaa.CropAndPad(px=self.hyperparams["px"],pad_cval=self.hyperparams["pad_cval"],percent=self.hyperparams["percent"], seed=self.hyperparams["seed"])
+        return iaa.CropAndPad(px=self.hyperparams["px"],pad_cval=self.hyperparams["pad_cval"],percent=self.hyperparams["percent"],pad_mode=self.hyperparams['pad_mode'],seed=self.hyperparams["seed"])

@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -32,12 +32,16 @@ class Hyperparams(hyperparams.Hyperparams):
         description='Minimum workers to extract frames simultaneously',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
-    p = hyperparams.Constant[float](
-        default=0.5,
-        description='The probability of an image to be filled with zeros.',
+    p = hyperparams.Hyperparameter[typing.Union[float,tuple]](
+        default=0.1,
+        description=' The probability of any pixel being dropped.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
-
+    nb_keep_channels = hyperparams.Hyperparameter[int](
+        default=1,
+        description='Minimum number of channels to keep unaltered in all images. ',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
 
 class Dropout2DPrimitive(AugmentationPrimitiveBase[Inputs, Hyperparams]):
     """
@@ -52,4 +56,5 @@ class Dropout2DPrimitive(AugmentationPrimitiveBase[Inputs, Hyperparams]):
         """
         seed = self.hyperparams["seed"]
         p = self.hyperparams["p"]
-        return iaa.Dropout2D(p=p,seed=seed)
+        nb_keep_channels = self.hyperparams['nb_keep_channels']
+        return iaa.Dropout2D(p=p,nb_keep_channels=nb_keep_channels,seed=seed)

@@ -27,8 +27,8 @@ __all__ = ('RemoveCBAsByOutOfImageFractionPrimitive',)
 Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
-    fraction = hyperparams.Constant[float](
-        default=0.50,
+    fraction = hyperparams.Hyperparameter[float](
+        default=0.5,
         description='the fraction of the augmentable area that is outside of the image.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )

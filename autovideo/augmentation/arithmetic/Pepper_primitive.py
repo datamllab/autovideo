@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -32,11 +32,17 @@ class Hyperparams(hyperparams.Hyperparams):
         description='Minimum workers to extract frames simultaneously',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
-    p = hyperparams.Constant[float](
-        default=0.05,
-        description='The probability of an image to be inverted.',
+    p = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=(0.0,0.05),
+        description='Probability of replacing a pixel with salt noise.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
+    per_channel = hyperparams.Hyperparameter[typing.Union[bool,float]](
+        default=False,
+        description='Whether to use (imagewise) the same sample(s) for all channels (False) or to sample value(s) for each channel (True). Setting this to True will therefore lead to different transformations per image and channel, otherwise only per image.',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+
 
 
 class PepperPrimitive(AugmentationPrimitiveBase[Inputs, Hyperparams]):
@@ -51,5 +57,6 @@ class PepperPrimitive(AugmentationPrimitiveBase[Inputs, Hyperparams]):
         set up function and parameter of functions
         """
         seed = self.hyperparams["seed"]
+        per_channel =self.hyperparams['per_channel']
         p = self.hyperparams["p"]
-        return iaa.Pepper(p=p,seed=seed)
+        return iaa.Pepper(p=p,per_channel=per_channel,seed=seed)

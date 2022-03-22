@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -27,9 +27,9 @@ __all__ = ('JpegCompressionPrimitive',)
 Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
-    compression = hyperparams.Set[int](
+    compression = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
         default=(70,99),
-        description=' Strength of the corruption, with valid values being',
+        description='Degree of compression used during JPEG compression within value range [0, 100].',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
     seed = hyperparams.Constant[int](

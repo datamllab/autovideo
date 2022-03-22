@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -27,6 +27,30 @@ __all__ = ('CartoonPrimitive',)
 Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
+
+    blur_ksize = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=(1, 5),
+        description='Median filter kernel size.',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+
+    segmentation_ksize = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=(0.8, 1.2),
+        description=' Mean-Shift segmentation size multiplier.',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+
+    saturation = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=(1.5, 2.5),
+        description='Saturation multiplier.',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+
+    edge_prevalence = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=(0.9, 1.1),
+        description=' Multiplier for the prevalence of edges. ',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
 
     seed = hyperparams.Constant[int](
         default=0,
@@ -47,6 +71,10 @@ class CartoonPrimitive(AugmentationPrimitiveBase[Inputs, Hyperparams]):
         """
         set up function and parameter of functions
         """
+        blur_ksize = self.hyperparams['blur_ksize']
+        segmentation_ksize = self.hyperparams['segmentation_ksize']
+        saturation = self.hyperparams['saturation']
+        edge_prevalence = self.hyperparams['edge_prevalence']
         seed = self.hyperparams["seed"]
-        return iaa.Cartoon(seed=seed)
+        return iaa.Cartoon(blur_ksize=blur_ksize,segmentation_ksize=segmentation_ksize,saturation=saturation,edge_prevalence=edge_prevalence,seed=seed)
 

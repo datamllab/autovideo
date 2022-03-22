@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -28,20 +28,20 @@ Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
 
-    gain = hyperparams.Set[float](
-        default=(3, 10),
+    gain = hyperparams.Hyperparameter[typing.Union[int,tuple,list]](
+        default=(5,6),
         description="Multiplier for the sigmoid function’s output. Higher values lead to quicker changes from dark to light pixels.",
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
-    cutoff = hyperparams.Set[float](
-        default=(0.4, 0.6),
+    cutoff = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=(0.3, 0.6),
         description="Cutoff that shifts the sigmoid function in horizontal direction. Higher values mean that the switch from dark to light pixels happens later, i.e. the pixels will remain darker.",
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
-    per_channel = hyperparams.Constant[bool](
-        default=True,
+    per_channel = hyperparams.Hyperparameter[bool](
+        default=False,
         description='Whether to use the same factor for all channels.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )

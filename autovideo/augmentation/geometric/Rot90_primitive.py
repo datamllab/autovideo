@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -28,13 +28,13 @@ Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
 
-    k = hyperparams.Set[int](
+    k = hyperparams.Hyperparameter[typing.Union[int,tuple,list]](
         default=(1, 3),
         description="How often to rotate clockwise by 90 degrees.",
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
-    keep_size = hyperparams.Constant[bool](
+    keep_size = hyperparams.Hyperparameter[bool](
         default=False,
         description='After rotation by an odd-valued k (e.g. 1 or 3), the resulting image may have a different height/width than the original image. If this parameter is set to True, then the rotated image will be resized to the input image’s size. Note that this might also cause the augmented image to look distorted.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],

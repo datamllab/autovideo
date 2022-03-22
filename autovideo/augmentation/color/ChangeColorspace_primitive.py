@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -37,8 +37,14 @@ class Hyperparams(hyperparams.Hyperparams):
 
     from_colorspace = hyperparams.Enumeration(
         values=['RGB', 'BGR', 'GRAY', 'CIE', 'YCrCb', 'HSV', 'HLS', 'Lab', 'Luv'],
-        default='HSV',
+        default='RGB',
         description="The source colorspace. ",
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+
+    alpha = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default= 1.0,
+        description='the alpha value of the new colorspace when overlayed over the old one. ',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
@@ -63,6 +69,7 @@ class ChangeColorspacePrimitive(AugmentationPrimitiveBase[Inputs, Hyperparams]):
         """
         to_colorspace = self.hyperparams['to_colorspace']
         from_colorspace = self.hyperparams['from_colorspace']
+        alpha = self.hyperparams['alpha']
         seed = self.hyperparams["seed"]
-        return iaa.ChangeColorspace(from_colorspace=from_colorspace, to_colorspace=to_colorspace, seed=seed)
+        return iaa.ChangeColorspace(from_colorspace=from_colorspace, to_colorspace=to_colorspace, alpha=alpha,seed=seed)
 

@@ -22,17 +22,27 @@ import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
-__all__ = ('EnhanceBrightnessPrimitive',)
+__all__ = ('CropToFixedSizePrimitive',)
 
 Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
-    factor = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
-        default=(0.5,1.5),
-        description=' Brightness of the image.',
+    width = hyperparams.Hyperparameter[typing.Union[int,None]](
+        default=100,
+        description='Pad images up to this minimum width.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
-
+    height = hyperparams.Hyperparameter[typing.Union[int,None]](
+        default=100,
+        description='Pad images up to this minimum height.',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+    position = hyperparams.Enumeration(
+        values=['uniform', 'normal', 'center', 'left-top', 'left-center', 'left-bottom', 'center-top', 'center-center', 'center-bottom', 'right-top', 'right-center', 'right-bottom'],
+        default='uniform',
+        description=" Sets the center point of the padding, which determines how the required padding amounts are distributed to each side. ",
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
     seed = hyperparams.Constant[int](
         default=0,
         description='Minimum workers to extract frames simultaneously',
@@ -40,17 +50,20 @@ class Hyperparams(hyperparams.Hyperparams):
     )
 
 
-class EnhanceBrightnessPrimitive(AugmentationPrimitiveBase[Inputs, Hyperparams]):
+
+class CropToFixedSizePrimitive(AugmentationPrimitiveBase[Inputs, Hyperparams]):
     """
-    A primitive which Change the brightness of images.
+    A primitive which crop images to a predefined minimum width and/or height.
     """
 
-    metadata = construct_primitive_metadata("augmentation", "pillike_EnhanceBrightness")
+    metadata = construct_primitive_metadata("augmentation", "size_CropToFixedSize")
 
     def _get_function(self):
         """
         set up function and parameter of functions
         """
-        factor = self.hyperparams['factor']
         seed = self.hyperparams["seed"]
-        return iaa.EnhanceBrightness(factor=factor,seed=seed)
+        height = self.hyperparams["height"]
+        width = self.hyperparams["width"]
+        position = self.hyperparams["position"]
+        return iaa.CropToFixedSize(width = width,height=height,position = position, seed=seed)

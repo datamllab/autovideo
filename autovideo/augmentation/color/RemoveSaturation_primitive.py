@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -28,7 +28,7 @@ Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
 
-    mul = hyperparams.Constant[float](
+    mul = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
         default= 1.0,
         description='Inverse multiplier to use for the saturation values. High values denote stronger color removal. E.g. 1.0 will remove all saturation, 0.0 will remove nothing. Expected value range is [0.0, 1.0].',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],

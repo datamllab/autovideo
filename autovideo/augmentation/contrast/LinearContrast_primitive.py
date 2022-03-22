@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -28,14 +28,14 @@ Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
 
-    alpha = hyperparams.Set[float](
-        default=(0.4, 1.6),
+    alpha = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=(0.6, 1.4),
         description="Multiplier to linearly pronounce (>1.0), dampen (0.0 to 1.0) or invert (<0.0) the difference between each pixel value and the dtype’s center value, e.g. 127 for uint8.",
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
-    per_channel = hyperparams.Constant[bool](
-        default=True,
+    per_channel = hyperparams.Hyperparameter[bool](
+        default=False,
         description='Whether to use the same factor for all channels.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )

@@ -27,12 +27,12 @@ __all__ = ('CenterPadToPowersOfPrimitive',)
 Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
-    width_base = hyperparams.Constant[int](
+    width_base = hyperparams.Hyperparameter[int](
         default=2,
         description='Base for the width.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
-    height_base = hyperparams.Constant[int](
+    height_base = hyperparams.Hyperparameter[int](
         default=3,
         description='Base for the height.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
@@ -57,6 +57,6 @@ class CenterPadToPowersOfPrimitive(AugmentationPrimitiveBase[Inputs, Hyperparams
         set up function and parameter of functions
         """
         seed = self.hyperparams["seed"]
-        height_base = self.hyperparams["height_multiple"]
-        width_base = self.hyperparams["width_multiple"]
+        height_base = self.hyperparams["height_base"]
+        width_base = self.hyperparams["width_base"]
         return iaa.CenterPadToPowersOf(width_base = width_base,height_base=height_base, seed=seed)

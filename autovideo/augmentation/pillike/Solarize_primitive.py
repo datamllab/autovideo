@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -27,12 +27,12 @@ __all__ = ('SolarizePrimitive',)
 Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
-    threshold  = hyperparams.Set[int](
+    threshold  = hyperparams.Hyperparameter[typing.Union[int,tuple,list]](
         default=(32,128),
         description='A threshold to use in order to invert only numbers above or below the threshold.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
-    p = hyperparams.Constant[float](
+    p = hyperparams.Hyperparameter[float](
         default=0.5,
         description='The probability of an image to be inverted.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],

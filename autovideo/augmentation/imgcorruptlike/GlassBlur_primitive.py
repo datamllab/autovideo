@@ -27,7 +27,7 @@ __all__ = ('GlassBlurPrimitive',)
 Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
-    severity = hyperparams.Constant[int](
+    severity = hyperparams.Hyperparameter[int](
         default=2,
         description=' Strength of the corruption, with valid values being',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],

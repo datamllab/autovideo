@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -27,9 +27,15 @@ __all__ = ('MinPoolingPrimitive',)
 Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
-    kernel_size = hyperparams.Constant[int](
-        default=2,
+    kernel_size = hyperparams.Hyperparameter[typing.Union[int,tuple,list]](
+        default=(1,5),
         description='The kernel size of the pooling operation.',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+
+    keep_size = hyperparams.Hyperparameter[bool](
+        default=True,
+        description='After pooling, the result image will usually have a different height/width compared to the original input image. If this parameter is set to True, then the pooled image will be resized to the input image’s size, i.e. the augmenter’s output shape is always identical to the input shape.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
@@ -52,5 +58,6 @@ class MinPoolingPrimitive(AugmentationPrimitiveBase[Inputs, Hyperparams]):
         set up function and parameter of functions
         """
         seed = self.hyperparams["seed"]
+        keep_size = self.hyperparams['keep_size']
         kernel_size = self.hyperparams["kernel_size"]
-        return iaa.MinPooling(kernel_size=kernel_size,seed=seed)
+        return iaa.MinPooling(kernel_size=kernel_size,keep_size=keep_size,seed=seed)

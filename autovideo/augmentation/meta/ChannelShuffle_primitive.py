@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -27,12 +27,16 @@ __all__ = ('ChannelShufflePrimitive',)
 Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
-    p = hyperparams.Hyperparameter(
+    p = hyperparams.Hyperparameter[float](
         default=0.35,
         description='Probability of shuffling channels in any given image.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
-
+    channels= hyperparams.Hyperparameter[typing.Union[list,None]](
+        default=None,
+        description='Which channels are allowed to be shuffled with each other.',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
     seed = hyperparams.Constant[int](
         default=0,
         description='Minimum workers to extract frames simultaneously',
@@ -53,6 +57,7 @@ class ChannelShufflePrimitive(AugmentationPrimitiveBase[Inputs, Hyperparams]):
         set up function and parameter of functions
         """
         p = self.hyperparams["p"]
+        channels = self.hyperparams['channels']
         seed = self.hyperparams["seed"]
-        return iaa.ChannelShuffle(p=0, seed=seed)
+        return iaa.ChannelShuffle(p=p,channels=channels, seed=seed)
 

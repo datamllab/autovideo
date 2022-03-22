@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -27,19 +27,19 @@ __all__ = ('UniformVoronoiPrimitive',)
 Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
-    n_points = hyperparams.Constant[int](
-        default=250,
+    n_points = hyperparams.Hyperparameter[typing.Union[int,tuple,list]](
+        default=(50,500),
         description='Number of points to sample on each image.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
-    p_replace = hyperparams.Constant[float](
-        default=0.9,
+    p_replace = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=(0.5,1.0),
         description='Defines for any segment the probability that the pixels within that segment are replaced by their average color (otherwise, the pixels are not changed).  ',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
-    max_size = hyperparams.Constant[int](
+    max_size = hyperparams.Hyperparameter[typing.Union[int,None]](
         default=128,
         description='Maximum image size at which the augmentation is performed. ',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],

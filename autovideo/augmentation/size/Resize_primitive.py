@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -27,11 +27,19 @@ __all__ = ('ResizePrimitive',)
 Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
-    size = hyperparams.Constant[int](
-        default=32,
+    size = hyperparams.Hyperparameter[typing.Union[int,float,tuple,list]](
+        default=0.5,
         description='The new size of the images.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
+
+    interpolation = hyperparams.Enumeration(
+        values=['nearest', 'linear', 'cubic', 'area'],
+        default='cubic',
+        description="Interpolation to use.",
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+
     seed = hyperparams.Constant[int](
         default=0,
         description='Minimum workers to extract frames simultaneously',
@@ -52,5 +60,6 @@ class ResizePrimitive(AugmentationPrimitiveBase[Inputs, Hyperparams]):
         set up function and parameter of functions
         """
         seed = self.hyperparams["seed"]
+        interpolation = self.hyperparams['interpolation']
         size = self.hyperparams["size"]
-        return iaa.Resize(size=size, seed=seed)
+        return iaa.Resize(size=size, interpolation=interpolation,seed=seed)

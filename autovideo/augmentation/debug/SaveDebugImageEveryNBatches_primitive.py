@@ -34,7 +34,7 @@ class Hyperparams(hyperparams.Hyperparams):
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
-    interval = hyperparams.Constant[int](
+    interval = hyperparams.Hyperparameter[int](
         default=100,
         description='Interval in batches. If set to N, every N th batch an image will be generated and saved, starting with the first observed batch. Note that the augmenter only counts batches that it sees. If it is executed conditionally or re-instantiated, it may not see all batches or the counter may be wrong in other ways.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],

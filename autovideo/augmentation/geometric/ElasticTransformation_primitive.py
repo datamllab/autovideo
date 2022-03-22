@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -28,15 +28,27 @@ Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
 
-    alpha = hyperparams.Set[float](
+    alpha = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
         default=(0.0, 40.0),
         description="Strength of the distortion field. Higher values mean that pixels are moved further with respect to the distortion field’s direction. Set this to around 10 times the value of sigma for visible effects.",
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
-    sigma = hyperparams.Set[float](
+    sigma = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
         default=(4.0, 8.0),
-        description=" Standard deviation of the gaussian kernel used to smooth the distortion fields. Higher values (for 128x128 images around 5.0) lead to more water-like effects, while lower values (for 128x128 images around 1.0 and lower) lead to more noisy, pixelated images. Set this to around 1/10th of alpha for visible effects.",
+        description="Standard deviation of the gaussian kernel used to smooth the distortion fields",
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+
+    order = hyperparams.Hyperparameter[typing.Union[int,list]](
+        default=1,
+        description="interpolation order to use",
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+
+    cval = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=(0,255),
+        description=" The constant value to use when filling in newly created pixels.",
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
@@ -62,5 +74,7 @@ class ElasticTransformationPrimitive(AugmentationPrimitiveBase[Inputs, Hyperpara
         alpha = self.hyperparams["alpha"]
         sigma = self.hyperparams["sigma"]
         seed = self.hyperparams["seed"]
-        return iaa.ElasticTransformation(alpha=alpha, sigma=sigma, seed=seed)
+        order = self.hyperparams["order"]
+        cval = self.hyperparams["cval"]
+        return iaa.ElasticTransformation(alpha=alpha, sigma=sigma, seed=seed, order=order, cval=cval)
 

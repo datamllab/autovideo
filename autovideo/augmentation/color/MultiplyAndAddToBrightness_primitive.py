@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -28,15 +28,21 @@ Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
 
-    mul = hyperparams.Set[float](
-        default=(0.5, 1.5),
+    mul = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=(0.7, 1.3),
         description='Multiply.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
-    add = hyperparams.Set[int](
+    add = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
         default=(-30,30),
         description='Add.',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+
+    random_order = hyperparams.Hyperparameter[bool](
+        default=True,
+        description='Whether to apply the add and multiply operations in random order (True). ',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
@@ -61,6 +67,7 @@ class MultiplyAndAddToBrightnessPrimitive(AugmentationPrimitiveBase[Inputs, Hype
         """
         mul = self.hyperparams["mul"]
         add = self.hyperparams["add"]
+        random_order = self.hyperparams['random_order']
         seed = self.hyperparams["seed"]
-        return iaa.MultiplyAndAddToBrightness(mul=mul, add=add, seed=seed)
+        return iaa.MultiplyAndAddToBrightness(mul=mul, add=add,random_order=random_order, seed=seed)
 

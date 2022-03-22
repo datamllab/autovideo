@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -27,6 +27,18 @@ __all__ = ('MeanShiftBlurPrimitive',)
 Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
+
+    spatial_radius = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=(5.0, 40.0),
+        description='Spatial radius for pixels that are assumed to be similar.',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+
+    color_radius = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=(5.0, 40.0),
+        description='Color radius for pixels that are assumed to be similar.',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
 
     seed = hyperparams.Constant[int](
         default=0,
@@ -48,5 +60,7 @@ class MeanShiftBlurPrimitive(AugmentationPrimitiveBase[Inputs, Hyperparams]):
         set up function and parameter of functions
         """
         seed = self.hyperparams["seed"]
-        return iaa.MeanShiftBlur(seed=seed)
+        spatial_radius = self.hyperparams['spatial_radius']
+        color_radius = self.hyperparams['color_radius']
+        return iaa.MeanShiftBlur(seed=seed,spatial_radius=spatial_radius,color_radius=color_radius)
 

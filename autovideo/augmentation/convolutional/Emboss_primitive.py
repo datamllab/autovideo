@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -28,14 +28,14 @@ Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
 
-    alpha = hyperparams.Set[float](
+    alpha = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
         default=(0.0, 1.0),
         description="Blending factor of the sharpened image. At 0.0, only the original image is visible, at 1.0 only its sharpened version is visible",
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
-    strength = hyperparams.Set[float](
-        default=(0.5, 1.5),
+    strength = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=(0.25, 1.0),
         description="Parameter that controls the strength of the embossing. Sane values are somewhere in the interval [0.0, 2.0] with 1.0 being the standard embossing effect. Default value is 1.0.",
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )

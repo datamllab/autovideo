@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -32,9 +32,9 @@ class Hyperparams(hyperparams.Hyperparams):
         description='Minimum workers to extract frames simultaneously',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
-    p = hyperparams.Constant[float](
-        default=1.0,
-        description='The probability of an image to be filled with zeros.',
+    p = hyperparams.Hyperparameter[typing.Union[float,tuple]](
+        default=0.5,
+        description=' The probability of any pixel being dropped.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 

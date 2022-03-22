@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -27,12 +27,12 @@ __all__ = ('CropToPowersOfPrimitive',)
 Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
-    width_base = hyperparams.Constant[int](
+    width_base = hyperparams.Hyperparameter[typing.Union[int,None]](
         default=2,
         description='Base for the width.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
-    height_base = hyperparams.Constant[int](
+    height_base = hyperparams.Hyperparameter[typing.Union[int,None]](
         default=3,
         description='Base for the height.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
@@ -63,7 +63,7 @@ class CropToPowersOfPrimitive(AugmentationPrimitiveBase[Inputs, Hyperparams]):
         set up function and parameter of functions
         """
         seed = self.hyperparams["seed"]
-        height_base = self.hyperparams["height_multiple"]
-        width_base = self.hyperparams["width_multiple"]
+        height_base = self.hyperparams["height_base"]
+        width_base = self.hyperparams["width_base"]
         position = self.hyperparams["position"]
         return iaa.CropToPowersOf(width_base = width_base,height_base=height_base,position = position, seed=seed)

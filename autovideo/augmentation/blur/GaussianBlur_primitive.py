@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -28,8 +28,8 @@ Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
 
-    sigma = hyperparams.Constant[float](
-        default=1.5,
+    sigma = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=(0.0,3.0),
         description='Standard deviation of the gaussian kernel.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )

@@ -27,12 +27,12 @@ __all__ = ('CenterCropToMultiplesOfPrimitive',)
 Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
-    width_multiple = hyperparams.Constant[int](
+    width_multiple = hyperparams.Hyperparameter[int](
         default=10,
         description='Crop images up to this base of width.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
-    height_multiple = hyperparams.Constant[int](
+    height_multiple = hyperparams.Hyperparameter[int](
         default=6,
         description='Crop images up to this base of height.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],

@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -28,9 +28,27 @@ Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
 
-    scale = hyperparams.Set[float](
+    scale = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
         default=(0.5, 1.5),
-        description=" Analogous to scale in Affine, except that this scale value only affects the y-axis. No dictionary input is allowed.",
+        description=" Analogous to scale in Affine, except that this scale value only affects the x-axis. No dictionary input is allowed.",
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+
+    order = hyperparams.Hyperparameter[typing.Union[int,list]](
+        default=1,
+        description="interpolation order to use",
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+
+    cval = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=(0,255),
+        description=" The constant value to use when filling in newly created pixels.",
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+
+    mode = hyperparams.Hyperparameter[typing.Union[str,list]](
+        default='constant',
+        description="Method to use when filling in newly created pixels",
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
@@ -55,5 +73,8 @@ class ScaleYPrimitive(AugmentationPrimitiveBase[Inputs, Hyperparams]):
         """
         scale = self.hyperparams["scale"]
         seed = self.hyperparams["seed"]
-        return iaa.ScaleY(scale=scale, seed=seed)
+        order = self.hyperparams["order"]
+        cval = self.hyperparams["cval"]
+        mode = self.hyperparams["mode"]
+        return iaa.ScaleX(scale=scale, seed=seed, order=order, cval=cval, mode=mode)
 

@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -27,19 +27,40 @@ __all__ = ('InvertPrimitive',)
 Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
-    threshold = hyperparams.Set[int](
-        default=(32,128),
+    
+    p = hyperparams.Hyperparameter[float](
+        default=0.5,
+        description='The probability of an image to be inverted.',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+    per_channel = hyperparams.Hyperparameter[typing.Union[bool,float]](
+        default=False,
+        description='Whether to use (imagewise) the same sample(s) for all channels (False) or to sample value(s) for each channel (True). Setting this to True will therefore lead to different transformations per image and channel, otherwise only per image.',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+    min_value = hyperparams.Hyperparameter[typing.Union[float,None]](
+        default=None,
+        description='Minimum of the value range of input images',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+    max_value = hyperparams.Hyperparameter[typing.Union[float,None]](
+        default=None,
+        description='Maximum of the value range of input images',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+    threshold = hyperparams.Hyperparameter[typing.Union[float,tuple,list,None]](
+        default=None,
         description=' A threshold to use in order to invert only numbers above or below the threshold.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
-    seed = hyperparams.Constant[int](
-        default=0,
-        description='Minimum workers to extract frames simultaneously',
+    invert_above_threshold = hyperparams.Hyperparameter[typing.Union[float,bool]](
+        default=0.5,
+        description=' If True, only values >=threshold will be inverted. Otherwise, only values <threshold will be inverted.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
-    p = hyperparams.Constant[float](
-        default=0.5,
-        description='The probability of an image to be inverted.',
+    seed = hyperparams.Constant[int]( 
+        default=0,
+        description='Minimum workers to extract frames simultaneously',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
@@ -57,5 +78,9 @@ class InvertPrimitive(AugmentationPrimitiveBase[Inputs, Hyperparams]):
         """
         seed = self.hyperparams["seed"]
         p = self.hyperparams["p"]
+        per_channel = self.hyperparams['per_channel']
+        min_value = self.hyperparams['min_value']
+        max_value = self.hyperparams['max_value']
         threshold = self.hyperparams["threshold"]
-        return iaa.Invert(p=p,threshold=threshold,seed=seed)
+        invert_above_threshold = self.hyperparams['invert_above_threshold']
+        return iaa.Invert(p=p,threshold=threshold,seed=seed,min_value=min_value,max_value=max_value,invert_above_threshold=invert_above_threshold,per_channel=per_channel)

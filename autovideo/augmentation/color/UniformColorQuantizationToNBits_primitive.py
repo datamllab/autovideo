@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -28,8 +28,8 @@ Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
 
-    nb_bits = hyperparams.Set[int](
-        default=(2, 8),
+    nb_bits = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=(1, 8),
         description="Number of bits to keep in each image’s array component.",
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )

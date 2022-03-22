@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -27,9 +27,31 @@ __all__ = ('CoarseSaltPrimitive',)
 Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
-    size_percent = hyperparams.Set[float](
-        default=(0.01,0.1),
+    p = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=(0.02,0.1),
+        description='Probability of changing a pixel to salt noise.',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+
+    size_px = hyperparams.Hyperparameter[typing.Union[int,tuple,None]](
+        default=None,
+        description=' The size of the lower resolution image from which to sample the dropout mask in absolute pixel dimensions..',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+
+    size_percent = hyperparams.Hyperparameter[typing.Union[float,tuple,None]](
+        default=0.5,
         description=' The size of the lower resolution image from which to sample the replacement mask in percent of the input image. ',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+    per_channel = hyperparams.Hyperparameter[typing.Union[bool,float]](
+        default=False,
+        description='Whether to use (imagewise) the same sample(s) for all channels (False) or to sample value(s) for each channel (True). Setting this to True will therefore lead to different transformations per image and channel, otherwise only per image.',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+    min_size = hyperparams.Hyperparameter[int](
+        default=3,
+        description='Minimum height and width of the low resolution mask.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
     seed = hyperparams.Constant[int](
@@ -37,12 +59,6 @@ class Hyperparams(hyperparams.Hyperparams):
         description='Minimum workers to extract frames simultaneously',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
-    p = hyperparams.Constant[float](
-        default=0.05,
-        description='The probability of an image to be inverted.',
-        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
-    )
-
 
 class CoarseSaltPrimitive(AugmentationPrimitiveBase[Inputs, Hyperparams]):
     """
@@ -57,5 +73,8 @@ class CoarseSaltPrimitive(AugmentationPrimitiveBase[Inputs, Hyperparams]):
         """
         seed = self.hyperparams["seed"]
         p = self.hyperparams["p"]
+        size_px = self.hyperparams['size_px']
         size_percent = self.hyperparams["size_percent"]
-        return iaa.CoarseSalt(p=p,size_percent=size_percent,seed=seed)
+        per_channel = self.hyperparams['per_channel']
+        min_size = self.hyperparams['min_size']
+        return iaa.CoarseSalt(p=p,size_percent=size_percent,size_px=size_px,per_channel=per_channel,min_size=min_size,seed=seed)

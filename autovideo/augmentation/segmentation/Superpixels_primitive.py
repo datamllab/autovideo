@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -27,17 +27,24 @@ __all__ = ('SuperpixelsPrimitive',)
 Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
-    p_replace = hyperparams.Constant[float](
-        default=0.5,
+    p_replace = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=(0.5,1.0),
         description='Defines for any segment the probability that the pixels within that segment are replaced by their average color (otherwise, the pixels are not changed).',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
-    n_segments = hyperparams.Constant[int](
-        default=64,
+    n_segments = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=(50,120),
         description='Rough target number of how many superpixels to generate (the algorithm may deviate from this number). ',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
+
+    max_size = hyperparams.Hyperparameter[typing.Union[int,None]](
+        default=128,
+        description='Maximum image size at which the augmentation is performed.',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
+    )
+
     seed = hyperparams.Constant[int](
         default=0,
         description='Minimum workers to extract frames simultaneously',
@@ -59,4 +66,5 @@ class SuperpixelsPrimitive(AugmentationPrimitiveBase[Inputs, Hyperparams]):
         seed = self.hyperparams["seed"]
         n_segments = self.hyperparams["n_segments"]
         p_replace = self.hyperparams["p_replace"]
-        return iaa.Superpixels(n_segments=n_segments,p_replace = p_replace ,seed=seed)
+        max_size = self.hyperparams['max_size']
+        return iaa.Superpixels(n_segments=n_segments,p_replace = p_replace, max_size=max_size,seed=seed)

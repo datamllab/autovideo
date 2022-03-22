@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -27,14 +27,14 @@ __all__ = ('MultiplyElementwisePrimitive',)
 Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
-    mul = hyperparams.Set[float](
-        default=(0.5, 1.5),
+    mul = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=(0.8, 1.2),
         description='The value with which to multiply the pixel values in each image.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
 
-    per_channel = hyperparams.Constant[bool](
-        default=True,
+    per_channel = hyperparams.Hyperparameter[typing.Union[bool,float]](
+        default=False,
         description='Whether to use (imagewise) the same sample(s) for all channels (False) or to sample value(s) for each channel (True). Setting this to True will therefore lead to different transformations per image and channel, otherwise only per image.',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )

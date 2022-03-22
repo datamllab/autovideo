@@ -18,7 +18,7 @@ limitations under the License.
 from d3m import container
 from d3m.metadata import hyperparams
 import imgaug.augmenters as iaa
-
+import typing
 from autovideo.utils import construct_primitive_metadata
 from autovideo.base.augmentation_base import AugmentationPrimitiveBase
 
@@ -27,32 +27,32 @@ __all__ = ('SnowflakesPrimitive',)
 Inputs = container.DataFrame
 
 class Hyperparams(hyperparams.Hyperparams):
-    density  = hyperparams.Set[float](
-        default=(0.005, 0.075),
+    density  = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=(0.01, 0.075),
         description= "Density of the snowflake layer, as a probability of each pixel in low resolution space to be a snowflake.",
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
-    density_uniformity = hyperparams.Set[float](
-        default=(0.3, 0.9),
+    density_uniformity = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=(0.45, 0.55),
         description='Size uniformity of the snowflakes. ',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
-    flake_size = hyperparams.Set[float](
+    flake_size = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
         default=(0.2, 0.7),
         description='This parameter controls the resolution at which snowflakes are sampled.  ',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
-    flake_size_uniformity = hyperparams.Set[float](
-        default=(0.4, 0.8),
+    flake_size_uniformity = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
+        default=(0.45, 0.55),
         description=' Controls the size uniformity of the snowflakes.  ',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
-    angle = hyperparams.Set[int](
+    angle = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
         default=(-30,30),
         description='Angle in degrees of motion blur applied to the snowflakes  ',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
     )
-    speed = hyperparams.Set[int](
+    speed = hyperparams.Hyperparameter[typing.Union[float,tuple,list]](
         default=(0.007, 0.03),
         description='Perceived falling speed of the snowflakes.   ',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
