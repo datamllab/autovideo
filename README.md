@@ -34,7 +34,7 @@ Zha, Daochen, et al. "AutoVideo: An Automated Video Action Recognition System." 
 ```
 
 ## Installation
-Make sure that you have **Python 3.6** and **pip** installed. Currently the code is only tested in Linux system. First, install `torch` and `torchvision` with
+Make sure that you have **Python 3.6+** and **pip** installed. Currently the code is only tested in Linux system. First, install `torch` and `torchvision` with
 ```
 pip3 install torch
 pip3 install torchvision
