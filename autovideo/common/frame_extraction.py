@@ -106,10 +106,8 @@ class ExtractFramesPrimitive(transformer.TransformerPrimitiveBase[Inputs, Output
                 mmcv.imwrite(
                     vr[i], '{}/img_{:05d}.jpg'.format(out_full_path, i + 1))
             else:
-                print('[Warning] length inconsistent!'
-                      'Early stop with {} out of {} frames'.format(i + 1, len(vr)))
                 break
-        logger.info('{} done with {} frames'.format(vid_name, len(vr)))
+        logger.info('{} done with {} out of {} frames'.format(vid_name, i, len(vr)))
         sys.stdout.flush()
         return True
 

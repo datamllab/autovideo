@@ -90,25 +90,25 @@ def build_pipeline(config):
 
     #Step 0: Denormalise
     step_0 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.autovideo.common.denormalize'))
-    step_0.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='inputs.0')
+    step_0.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data='inputs.0')
     step_0.add_output('produce')
     pipeline_description.add_step(step_0)
 
     #Step 1: Dataset to DataFrame
     step_1 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.autovideo.common.dataset_to_dataframe'))
-    step_1.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference=f'steps.{step_0.index}.produce')
+    step_1.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data=f'steps.{step_0.index}.produce')
     step_1.add_output('produce')
     pipeline_description.add_step(step_1)
 
     #Step 2: Column Parser
     step_2 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.autovideo.common.column_parser'))
-    step_2.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference=f'steps.{step_1.index}.produce')
+    step_2.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data=f'steps.{step_1.index}.produce')
     step_2.add_output('produce')
     pipeline_description.add_step(step_2)
 
     #Step 3: Extract columns by semantic types - Attributes
     step_3 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.autovideo.common.extract_columns_by_semantic_types'))
-    step_3.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference=f'steps.{step_2.index}.produce')
+    step_3.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data=f'steps.{step_2.index}.produce')
     step_3.add_output('produce')
     step_3.add_hyperparameter(name='semantic_types', argument_type=ArgumentType.VALUE,
                                       data=['https://metadata.datadrivendiscovery.org/types/Attribute'])
@@ -116,7 +116,7 @@ def build_pipeline(config):
 
     #Step 4: Extract Columns by semantic types - Target
     step_4 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.autovideo.common.extract_columns_by_semantic_types'))
-    step_4.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference=f'steps.{step_1.index}.produce')
+    step_4.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data=f'steps.{step_1.index}.produce')
     step_4.add_output('produce')
     step_4.add_hyperparameter(name='semantic_types', argument_type=ArgumentType.VALUE,
                                       data=['https://metadata.datadrivendiscovery.org/types/TrueTarget'])
@@ -127,7 +127,7 @@ def build_pipeline(config):
         step_5 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.autovideo.common.numpy_loader'))
     else:
         step_5 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.autovideo.common.extract_frames'))
-    step_5.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference=f'steps.{step_3.index}.produce')
+    step_5.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data=f'steps.{step_3.index}.produce')
     step_5.add_output('produce')
     pipeline_description.add_step(step_5)
 
@@ -135,7 +135,7 @@ def build_pipeline(config):
     for i in range(len(transformation_methods)):
         alg_python_path = 'd3m.primitives.autovideo.transformation.' + transformation_methods[i]
         step_transformation = PrimitiveStep(primitive=index.get_primitive(alg_python_path))
-        step_transformation.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.'+str(curr_step_no)+'.produce')
+        step_transformation.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data='steps.'+str(curr_step_no)+'.produce')
         if transformation_configs[i] != None:
             for key in transformation_configs[i]:
                 value = transformation_configs[i][key]
@@ -148,7 +148,7 @@ def build_pipeline(config):
     for i in range(len(augmentation_methods)):
         alg_python_path = 'd3m.primitives.autovideo.augmentation.' + augmentation_methods[i]
         step_augmentation = PrimitiveStep(primitive=index.get_primitive(alg_python_path))
-        step_augmentation.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.'+str(curr_step_no)+'.produce')
+        step_augmentation.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data='steps.'+str(curr_step_no)+'.produce')
         if augmentation_configs[i] != None:
             for key in augmentation_configs[i]:
                 value = augmentation_configs[i][key]
@@ -161,7 +161,7 @@ def build_pipeline(config):
     if multi_aug != None:
         alg_python_path = 'd3m.primitives.autovideo.augmentation.'+multi_aug
         step_7 = PrimitiveStep(primitive=index.get_primitive(alg_python_path))
-        step_7.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.'+str(curr_step_no)+'.produce')
+        step_7.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data='steps.'+str(curr_step_no)+'.produce')
         step_7.add_output('produce')
         pipeline_description.add_step(step_7)
         curr_step_no += 1
@@ -170,8 +170,8 @@ def build_pipeline(config):
     #Step 8: Video primitive
     alg_python_path = 'd3m.primitives.autovideo.recognition.' + algorithm
     step_8 = PrimitiveStep(primitive=index.get_primitive(alg_python_path))
-    step_8.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.'+str(curr_step_no)+'.produce')
-    step_8.add_argument(name='outputs', argument_type=ArgumentType.CONTAINER, data_reference=f'steps.{step_4.index}.produce')
+    step_8.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data='steps.'+str(curr_step_no)+'.produce')
+    step_8.add_argument(name='outputs', argument_type=ArgumentType.CONTAINER, data=f'steps.{step_4.index}.produce')
     # Add hyperparameters
     for key, value in config.items():
         step_8.add_hyperparameter(name=key, argument_type=ArgumentType.VALUE, data=value)
@@ -181,10 +181,10 @@ def build_pipeline(config):
 
     #Step 9: Construct the predictions
     step_9 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.autovideo.common.construct_predictions'))
-    step_9.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference=f'steps.{step_8.index}.produce')
-    step_9.add_argument(name='reference', argument_type=ArgumentType.CONTAINER, data_reference=f'steps.{step_2.index}.produce')
+    step_9.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data=f'steps.{step_8.index}.produce')
+    step_9.add_argument(name='reference', argument_type=ArgumentType.CONTAINER, data=f'steps.{step_2.index}.produce')
     step_9.add_output('produce')
-    step_9.add_hyperparameter(name = 'use_columns', argument_type=ArgumentType.VALUE, data = [0,1])
+    step_9.add_hyperparameter(name = 'use_columns', argument_type=ArgumentType.VALUE, data=[0,1])
     pipeline_description.add_step(step_9)
     curr_step_no += 1
 
