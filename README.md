@@ -10,7 +10,7 @@
 AutoVideo is a system for automated video analysis. It is developed based on [D3M](https://gitlab.com/datadrivendiscovery/d3m) infrastructure, which describes machine learning with generic pipeline languages. Currently, it focuses on video action recognition, supporting a complete training pipeline consisting of data processing, video processing, video transformation, and action recognition. It also supports automated tuners for pipeline search. AutoVideo is developed by [DATA Lab](https://cs.rice.edu/~xh37/) at Rice University.
 
 *   Paper: [https://arxiv.org/abs/2108.04212](https://arxiv.org/abs/2108.04212)
-*   Demo Video: [https://youtu.be/vXpRfsdt1a0](https://youtu.be/vXpRfsdt1a0)
+*   Demo Video: [https://youtu.be/BEInjBjeIuo](https://youtu.be/BEInjBjeIuo)
 *   Tutorial: [[Towards Data Science] AutoVideo: An Automated Video Action Recognition System](https://towardsdatascience.com/autovideo-an-automated-video-action-recognition-system-43198beff99d)
 *   Related Project: [TODS: Automated Time-series Outlier Detection System](https://github.com/datamllab/tods)
 
@@ -25,11 +25,11 @@ If you find this repo useful, you may cite:
 
 Zha, Daochen, et al. "AutoVideo: An Automated Video Action Recognition System." arXiv preprint arXiv:2108.0421 (2021).
 ```bibtex
-@article{zha2021autovideo,
+@inproceedings{zha2021autovideo,
   title={AutoVideo: An Automated Video Action Recognition System},
   author={Zha, Daochen and Bhat, Zaid and Chen, Yi-Wei and Wang, Yicheng and Ding, Sirui and Jain, Anmoll and Bhat, Mohammad and Lai, Kwei-Herng and Chen, Jiaben and Zou, Na and Hu, Xia},
-  journal={arXiv preprint arXiv:2108.04212},
-  year={2021}
+  booktitle={IJCAI},
+  year={2022}
 }
 ```
 
