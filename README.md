@@ -13,7 +13,7 @@ AutoVideo is a system for automated video analysis. It is developed based on [D3
 *   Demo Video: [https://youtu.be/BEInjBjeIuo](https://youtu.be/BEInjBjeIuo)
 *   Tutorial: [[Towards Data Science] AutoVideo: An Automated Video Action Recognition System](https://towardsdatascience.com/autovideo-an-automated-video-action-recognition-system-43198beff99d)
 *   Related Project: [TODS: Automated Time-series Outlier Detection System](https://github.com/datamllab/tods)
-*   :loudspeaker: Do you want to learn more about data pipeline search? Please check out our [data-centric AI survey](https://arxiv.org/abs/2212.11854) and [data-centric AI resources](https://github.com/daochenzha/data-centric-AI)!
+*   :loudspeaker: Do you want to learn more about data pipeline search? Please check out our [data-centric AI survey](https://arxiv.org/abs/2303.10158) and [data-centric AI resources](https://github.com/daochenzha/data-centric-AI)!
 
 There are some other video analysis libraries out there, but this one is designed to be highly modular. AutoVideo is highly extendible thanks to the pipeline language, where each module is wrapped as a primitive with some hyperparameters. This allows us to easily develop new modules. It is also convenient to perform pipeline search. We welcome contributions to enrich AutoVideo with more primitives. You can find instructions in [Contributing Guide](./CONTRIBUTING.md).
 
