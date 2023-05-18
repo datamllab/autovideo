@@ -28,7 +28,7 @@ Zha, Daochen, et al. "AutoVideo: An Automated Video Action Recognition System." 
 ```bibtex
 @inproceedings{zha2021autovideo,
   title={Autovideo: An automated video action recognition system},
-  author={Zha, Daochen and Bhat, Zaid Pervaiz and Chen, Yi-Wei and Wang, Yicheng and Ding, Sirui and Chen, Jiaben and Lai, Kwei-Herng and Bhat, Mohammad Qazim and Jain, Anmoll Kumar and Reyes, Alfredo Costilla and others},
+  author={Zha, Daochen and Bhat, Zaid Pervaiz and Chen, Yi-Wei and Wang, Yicheng and Ding, Sirui and Chen, Jiaben and Lai, Kwei-Herng and Bhat, Mohammad Qazim and Jain, Anmoll Kumar and Reyes, Alfredo Costilla and Zou, Na and Xia, Hu},
   booktitle={IJCAI},
   year={2022}
 }
